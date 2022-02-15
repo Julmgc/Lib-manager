@@ -1,6 +1,8 @@
 import { getCustomRepository } from "typeorm";
 import GenreRepository from "../repositories/genreRepository";
 import fs from 'fs';
+import ddcCodes from '../utils/ddcCodes.json';
+import path from 'path';
 
 
 export class DDCdata {
@@ -15,16 +17,9 @@ export class DDCdata {
 		    return;
 		}
 
-		// const data = fs.read("../utils/ddcCodes.json", 'utf8', () => {
+		fs.readFile(path.resolve(__dirname, "..", "utils/ddcCodes.json"), "utf8", (err, data) => {
+			this.repo().createQueryBuilder().insert().values(JSON.parse(data)).execute();
+		});
 
-		// });
-		// this.repo().createQueryBuilder().insert().values(JSON.parse(data)).execute();
-		// for (let item of data) {
-				// 		continue;
-		// 	}
-		// 	const partial = {ddc: item.ddc, description: item.description}
-		//     const treco = this.repo().create(partial)
-		// 	await this.repo().save(treco)
-		// }
 	};
 }

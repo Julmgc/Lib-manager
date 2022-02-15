@@ -6,12 +6,12 @@ const env = {
 		process.env.NODE_ENV === "production"
 			? { rejectUnauthorized: false }
 			: false,
-	port: 5432,
+	port: 5431,
 	username: "test",
 	password: "test",
 	database: "test",
 	synchronize: true,
-	logging: true,
+	logging: false,
 	entities:
 		process.env.NODE_ENV === "production"
 			? ["dist/src/entities/**/*.js"]
