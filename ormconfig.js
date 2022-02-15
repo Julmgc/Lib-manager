@@ -7,9 +7,9 @@ const env = {
       ? { rejectUnauthorized: false }
       : false,
   port: 5431,
-  username: "postgres",
-  password: "1234",
-  database: "libteste",
+  username: "test",
+  password: "test",
+  database: "test",
   synchronize: true,
   logging: true,
   entities:
