@@ -6,7 +6,7 @@ const env = {
 		process.env.NODE_ENV === "production"
 			? { rejectUnauthorized: false }
 			: false,
-	port: 5432,
+	port: 5431,
 	username: "test",
 	password: "test",
 	database: "test",
