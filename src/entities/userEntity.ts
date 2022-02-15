@@ -1,7 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, OneToMany } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, ManyToOne, OneToMany } from "typeorm";
 import bcrypt from 'bcrypt';
 
-// import { Andress } "./andressesEntity";
+import Address  from "./addressesEntity";
+import Book  from "./bookEntity";
+import Review from "./reviewEntity";
+import UserBooks from "./userBooksEntity";
+import Fine from "./fineEntity";
 
 @Entity('users')
 export default class User {
@@ -18,30 +22,41 @@ export default class User {
     @Column()
     password: string;
 
-    @Column()
-    loaned_books!: number; 
+    @Column({ type: "int" })
+    loanedBooks!: number; 
 
     @Column()
-    authorized: boolean;
+    authorized!: boolean;
 
     @Column()
-    is_adm: boolean;
+    isAdm: boolean;
 
     @BeforeInsert()
     hashPassword() {
         this.password = bcrypt.hashSync(this.password, 10);
     }
 
-    // @ManyToOne(() => Andress, andress => andress.users)
-    // andresses!: Andress;
+    @ManyToOne(() => Address, address => address.users)
+    andress!: Address;
+
+    @OneToMany(() => Book, book => book.user)
+    books!: Book[];
+
+    @OneToMany(() => Review, review => review.user)
+    reviews!: Review[];
+
+    @OneToMany(() => UserBooks, userBooks => userBooks.user)
+    userBooks!: UserBooks[];
+
+    @OneToMany(() => Fine, fine => fine.user)
+    fines!: Fine[];
 
 
-    constructor(email: string, password: string, name: string, is_adm: boolean, authorized: boolean = true) {
+    constructor(name: string, email: string, password: string, isAdm: boolean) {
         this.name = name;
         this.email = email;
         this.password = password;
-        this.is_adm = is_adm;
-        this.authorized = authorized;
+        this.isAdm = isAdm;
     }
 
 }

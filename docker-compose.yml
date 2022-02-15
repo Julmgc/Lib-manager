@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 services:
   app:
     build: .
@@ -6,6 +6,7 @@ services:
       - 3000:3000
     environment:
       - JWT_KEY=chaveDocker
+      - DATABASE_HOST=postgres
     volumes:
       - .:/app
     depends_on:
@@ -20,4 +21,3 @@ services:
       POSTGRES_PASSWORD: "test"
       POSTGRES_DB: "test"
     command: -p 5431
-
