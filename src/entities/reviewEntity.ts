@@ -1,26 +1,31 @@
-// import {
-//   Entity,
-//   PrimaryGeneratedColumn,
-//   CreateDateColumn,
-//   Column,
-//   ManyToOne,
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  Column,
+  ManyToOne,
+} from "typeorm";
+import User from "./userEntity";
+import Book from "./bookEntity";
 
-// } from "typeorm";
-// // import User from "./User";
-// // import Book from "./Book";
+@Entity("reviews")
+export default class Review {
+  @PrimaryGeneratedColumn("uuid")
+  id!: string;
 
-// @Entity("reviews")
-// export default class Review {
-//   @PrimaryGeneratedColumn("uuid")
-//   id: string;
+  @ManyToOne(() => User, { eager: true })
+  user!: User;
 
-//   @ManyToOne(() => User, {eager: true})
-//   user: User;
+  @Column()
+  bookId: string;
 
-//   @ManyToOne(() =>  Book, {eager: true})
-//   book: Book
+  @ManyToOne(() => Book, { eager: true })
+  book!: Book;
 
-//   @CreateDateColumn()
-//   createdOn!: Date;
+  @CreateDateColumn()
+  createdOn!: Date;
 
-// }
+  constructor(bookId: string) {
+    this.bookId = bookId;
+  }
+}
