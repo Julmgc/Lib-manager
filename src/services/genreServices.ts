@@ -2,16 +2,18 @@ import { getCustomRepository } from "typeorm";
 import GenreRepository from "../repositories/genreRepository";
 import fs from "fs";
 import path from "path";
+import { ApiError } from "../utils/errors";
 
-export class DDCdata {
-	static repo = () => {
+export class GenreServices {
+	static genreRepository = () => {
 		return getCustomRepository(GenreRepository);
 	};
-	static insert = async () => {
-		const dataInTable = await this.repo().findOne({ ddc: "000" });
+	static insertBaseCodes = async () => {
+		const dataInTable = await this.genreRepository().findOne({
+			ddc: "000",
+		});
 
 		if (dataInTable !== undefined) {
-			console.info("skipped");
 			return;
 		}
 
@@ -19,7 +21,7 @@ export class DDCdata {
 			path.resolve(__dirname, "..", "utils/ddcCodes.json"),
 			"utf8",
 			(err, data) => {
-				this.repo()
+				this.genreRepository()
 					.createQueryBuilder()
 					.insert()
 					.values(JSON.parse(data))
@@ -27,4 +29,30 @@ export class DDCdata {
 			}
 		);
 	};
+
+	static getAll = async (page: number, per_page: number = 10) => {
+		if (page) {
+			const codes = await this.genreRepository()
+				.createQueryBuilder()
+				.skip(per_page * (page - 1))
+				.take(per_page)
+				.getMany();
+			return codes;
+		}
+		const codes = await this.genreRepository().find();
+
+		return codes;
+	};
+
+	static getByCode = async (code: string) => {
+		const genre = await this.genreRepository().findOne({ ddc: code });
+
+		if (!genre) {
+			throw new ApiError("DDC not found!", 404);
+		}
+
+		return genre;
+	};
+
+	
 }

@@ -5,7 +5,6 @@ import { handleError } from "./utils/errors";
 import swaggerUi from "swagger-ui-express";
 // import swaggerFile from "../swagger.json";
 import dotenv from "dotenv";
-import { DDCdata } from "./services/genreServices";
 
 
 dotenv.config();
@@ -14,7 +13,6 @@ const app = express();
 
 app.use(express.json());
 
-app.get('/', DDCdata.insert)
 
 startRoutes(app);
 
