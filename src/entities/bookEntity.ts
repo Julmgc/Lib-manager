@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import {
   Entity,
   Column,
@@ -37,6 +36,3 @@ export class Book {
   @OneToMany((type) => User, (user) => user.on_loan_to)
   user!: User;
 }
-=======
-export default class Book {}
->>>>>>> bf141388e7601ee5b7b728f1145349464f50e6ec
