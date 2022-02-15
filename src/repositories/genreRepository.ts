@@ -1,5 +1,5 @@
 import { EntityRepository, Repository } from "typeorm";
-import { GenreEntity } from "../entities/genreEntity";
+import { Genre } from "../entities/genreEntity";
 
-@EntityRepository(GenreEntity)
-export default class GenreRepository extends Repository<GenreEntity> {}
+@EntityRepository(Genre)
+export default class GenreRepository extends Repository<Genre> {}

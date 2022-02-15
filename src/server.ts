@@ -5,5 +5,5 @@ import { DDCdata } from "./services/genreServices";
 startDBConnection().then(()=> DDCdata.insert());
 
 app.listen(process.env.PORT || 3000, () => {
-	console.log("Running!");
+  console.log("Running!");
 });
