@@ -6,7 +6,7 @@ services:
       - 3000:3000
     environment:
       - JWT_KEY=chaveDocker
-      - DATABASE_HOST=postgres
+      - DATABASE_HOST=lib-manager_postgres_1
     volumes:
       - .:/app
     depends_on:
@@ -17,6 +17,7 @@ services:
     ports:
       - "5431:5432"
     environment:
-      POSTGRES_USER: "postegre"
+      POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "1234"
       POSTGRES_DB: "libteste"
+    command: -p 5431
