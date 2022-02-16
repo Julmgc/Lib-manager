@@ -1,11 +1,11 @@
 import {
-	Entity,
-	PrimaryGeneratedColumn,
-	Column,
-	BeforeInsert,
-	OneToMany,
-	OneToOne,
-    JoinColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  BeforeInsert,
+  OneToMany,
+  OneToOne,
+  JoinColumn,
 } from "typeorm";
 import bcrypt from "bcrypt";
 
@@ -16,57 +16,67 @@ import Fine from "./fineEntity";
 
 @Entity("users")
 export default class User {
-	@PrimaryGeneratedColumn("uuid")
-	id!: string;
+  @PrimaryGeneratedColumn("uuid")
+  id!: string;
 
-	@Column()
-	name: string;
+  @Column()
+  name: string;
 
-	@Column({ unique: true })
-	email: string;
+  @Column({ unique: true })
+  email: string;
 
-	@Column()
-	password: string;
+  @Column()
+  password: string;
 
-	@OneToMany(() => UserBooks, (userBooks) => userBooks.user)
-	loanedBooks!: UserBooks;
+  @Column()
+  cpf: string;
 
-	@Column()
-	authorized!: boolean;
+  @OneToMany(() => UserBooks, (userBooks) => userBooks.user)
+  loanedBooks!: UserBooks;
 
-	@Column()
-	isAdm: boolean;
+  @Column()
+  authorized!: boolean;
 
-	@BeforeInsert()
-	hashPassword() {
-		this.password = bcrypt.hashSync(this.password, 10);
-	}
+  @Column()
+  isAdm: boolean;
 
-	@OneToOne(() => Address)
-    @JoinColumn()
-	address!: Address;
+  @BeforeInsert()
+  hashPassword() {
+    this.password = bcrypt.hashSync(this.password, 10);
+  }
 
-	// @OneToMany(() => Book, book => book.user)
-	// books!: Book[];
+  @OneToOne(() => Address)
+  @JoinColumn()
+  address!: Address;
 
-	@OneToMany(() => Review, (review) => review.user)
-	reviews!: Review[];
+  // @OneToMany(() => Book, book => book.user)
+  // books!: Book[];
 
-	// @OneToMany(() => UserBooks, userBooks => userBooks.user)
-	// userBooks!: UserBooks[];
+  @OneToMany(() => Review, (review) => review.user)
+  reviews!: Review[];
 
-	@OneToMany(() => Fine, (fine) => fine.user)
-	fines!: Fine[];
+  // @OneToMany(() => UserBooks, userBooks => userBooks.user)
+  // userBooks!: UserBooks[];
 
-	constructor(name: string, email: string, password: string, isAdm: boolean) {
-		this.name = name;
-		this.email = email;
-		this.password = password;
-		this.isAdm = isAdm;
-	};
+  @OneToMany(() => Fine, (fine) => fine.user)
+  fines!: Fine[];
 
-	toJSON() {
-		const { password, ...rest} = this;
-		return rest;
-	};
+  constructor(
+    name: string,
+    email: string,
+    password: string,
+    isAdm: boolean,
+    cpf: string
+  ) {
+    this.name = name;
+    this.email = email;
+    this.password = password;
+    this.isAdm = isAdm;
+    this.cpf = cpf;
+  }
+
+  toJSON() {
+    const { password, ...rest } = this;
+    return rest;
+  }
 }
