@@ -9,7 +9,7 @@ import {
 } from "typeorm";
 import bcrypt from "bcrypt";
 
-import Address from "./addressesEntity";
+import Address from "./addressEntity";
 import Review from "./reviewEntity";
 import UserBooks from "./userBooksEntity";
 import Fine from "./fineEntity";
