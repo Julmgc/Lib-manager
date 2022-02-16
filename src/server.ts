@@ -1,8 +1,8 @@
 import app from "./app";
 import startDBConnection from "./database";
-import { DDCdata } from "./services/genreServices";
+import { GenreServices } from "./services/genreServices";
 
-startDBConnection().then(()=> DDCdata.insert());
+startDBConnection().then(() => GenreServices.insertBaseCodes());
 
 app.listen(process.env.PORT || 3000, () => {
   console.log("Running!");
