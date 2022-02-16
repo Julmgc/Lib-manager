@@ -15,16 +15,9 @@ services:
   postgres:
     image: "postgres"
     ports:
-<<<<<<< HEAD
-      - "5431:5432"
-=======
       - "5431:5431"
->>>>>>> bf141388e7601ee5b7b728f1145349464f50e6ec
     environment:
       POSTGRES_USER: "test"
       POSTGRES_PASSWORD: "test"
       POSTGRES_DB: "test"
-<<<<<<< HEAD
-=======
     command: -p 5431
->>>>>>> bf141388e7601ee5b7b728f1145349464f50e6ec
