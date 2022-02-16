@@ -63,5 +63,10 @@ export default class User {
 		this.email = email;
 		this.password = password;
 		this.isAdm = isAdm;
-	}
+	};
+
+	toJSON() {
+		const { password, ...rest} = this;
+		return rest;
+	};
 }
