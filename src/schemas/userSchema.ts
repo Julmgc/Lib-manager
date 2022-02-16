@@ -5,6 +5,7 @@ const userSchema = yup.object().shape({
   name: yup.string().required().max(50),
   email: yup.string().required().max(150).email(),
   password: yup.string().required(),
+  cpf: yup.string().required().length(11),
   authorized: yup
     .boolean()
     .default(true)
@@ -14,7 +15,7 @@ const userSchema = yup.object().shape({
     street: yup.string().required(),
     streetNumber: yup.string().max(5).required(),
     city: yup.string().required(),
-    cpf: yup.string().required().length(11),
+
     state: yup
       .string()
       .required()

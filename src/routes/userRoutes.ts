@@ -10,11 +10,12 @@ const userRouter = () => {
   router.post(
     "/",
     validateReqFields(userSchema),
-    verifyIfEmailExists,
+    // verifyIfEmailExists,
     UserController.postUserRoute
   );
 
   router.delete("/:userId", userExists, paramsVSjwt, UserController.deleteUser);
+  router.get("", UserController.getUsers);
 
   return router;
 };
