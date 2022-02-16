@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne } from "typeorm";
 
 import User from "./userEntity";
 
@@ -25,13 +25,17 @@ export default class Address {
 	@Column()
 	zipcode: string;
 
-	@OneToMany(() => User, user => user.andress)
-	users!: User[];
-
-	constructor(street: string, streetNumber: number, discrict: string, city: string, state: string, zipcode: string) {
+	constructor(
+		street: string,
+		streetNumber: number,
+		discrict: string,
+		city: string,
+		state: string,
+		zipcode: string
+	) {
 		this.street = street;
 		this.streetNumber = streetNumber;
-		this.discrict = discrict
+		this.discrict = discrict;
 		this.city = city;
 		this.state = state;
 		this.zipcode = zipcode;
