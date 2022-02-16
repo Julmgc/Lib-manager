@@ -1,38 +1,42 @@
 import {
-  Entity,
-  Column,
-  CreateDateColumn,
-  PrimaryGeneratedColumn,
-  ManyToOne,
-  OneToMany,
+	Entity,
+	Column,
+	CreateDateColumn,
+	PrimaryGeneratedColumn,
+	ManyToOne,
+	OneToOne,
+    OneToMany,
 } from "typeorm";
+import Fine from "./fineEntity";
 
 import Genre from "./genreEntity";
+import UserBooks from "./userBooksEntity";
 import User from "./userEntity";
 
 @Entity("books")
-export class Book {
-  @PrimaryGeneratedColumn("uuid")
-  id!: string;
+export default class Book {
+	@PrimaryGeneratedColumn("uuid")
+	id!: string;
 
-  @Column({ nullable: false })
-  name!: string;
+	@Column({ nullable: false })
+	name!: string;
 
-  @Column({ nullable: false })
-  author!: string;
+	@Column({ nullable: false })
+	author!: string;
 
-  @Column({ nullable: false })
-  pages!: number;
+	@Column({ nullable: false })
+	pages!: number;
 
-  @CreateDateColumn({ nullable: false })
-  published_date!: Date;
+	@CreateDateColumn({ nullable: false })
+	published_date!: Date;
 
-  @ManyToOne((type) => Genre, (genre) => genre.book)
-  genre: Genre;
+	@ManyToOne(() => Genre)
+	genre!: Genre;
 
-  @ManyToOne((type) => User, (user) => user.book)
-  adminId: User;
+	@ManyToOne(() => User)
+	adminId!: User;
 
-  @OneToMany((type) => User, (user) => user.on_loan_to)
-  user!: User;
+	@OneToOne(() => UserBooks)
+	loan!: UserBooks;
+
 }

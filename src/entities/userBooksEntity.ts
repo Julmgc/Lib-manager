@@ -1,15 +1,25 @@
-import { Entity, PrimaryGeneratedColumn, ManyToOne, Column } from "typeorm";
+import {
+	Entity,
+	PrimaryGeneratedColumn,
+	ManyToOne,
+	Column,
+	OneToOne,
+	JoinColumn,
+} from "typeorm";
+import Book from "./bookEntity";
+import User from "./userEntity";
 
 @Entity("user_books")
 export default class UserBooks {
 	@PrimaryGeneratedColumn("increment")
 	id!: number;
 
-	@ManyToOne("")
-	user_id!: number;
+	@ManyToOne(() => User, (user) => user.loanedBooks)
+	user!: User;
 
-	@ManyToOne("")
-	book_id!: number;
+	@OneToOne(() => Book)
+	@JoinColumn()
+	book!: Book;
 
 	@Column("date", { default: new Date() })
 	checkout_date!: Date;

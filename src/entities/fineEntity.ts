@@ -1,19 +1,30 @@
-import { Entity, PrimaryGeneratedColumn, ManyToOne, Column } from "typeorm";
+import {
+	Entity,
+	PrimaryGeneratedColumn,
+	Column,
+	OneToOne,
+	ManyToOne,
+    PrimaryColumn,
+    JoinColumn,
+} from "typeorm";
+import Book from "./bookEntity";
+import User from "./userEntity";
 
 @Entity("fine")
 export default class Fine {
-  @PrimaryGeneratedColumn("increment")
-  id!: number;
+	@PrimaryGeneratedColumn("increment")
+	id!: number;
 
-  @ManyToOne("")
-  book_id!: number;
+    @OneToOne(() => Book, {eager: true})
+    @JoinColumn()
+	book!: Book;
 
-  @ManyToOne("")
-  user_id!: number;
+	@ManyToOne(() => User)
+	user!: User;
 
-  @Column()
-  worth!: number;
+	@Column()
+	worth!: number;
 
-  @Column()
-  total!: number;
+	@Column()
+	total!: number;
 }

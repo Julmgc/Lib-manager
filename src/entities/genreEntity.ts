@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryColumn } from "typeorm";
 
 @Entity("genres")
-export class Genre {
+export default class Genre {
 
     @PrimaryColumn()
     ddc!: string;
