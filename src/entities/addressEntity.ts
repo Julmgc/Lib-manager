@@ -4,40 +4,40 @@ import User from "./userEntity";
 
 @Entity()
 export default class Address {
-	@PrimaryGeneratedColumn("uuid")
-	id!: string;
+  @PrimaryGeneratedColumn("uuid")
+  id!: string;
 
-	@Column()
-	street: string;
+  @Column()
+  street: string;
 
-	@Column({ type: "int" })
-	streetNumber: number;
+  @Column()
+  streetNumber: string;
 
-	@Column()
-	discrict: string;
+  @Column()
+  district: string;
 
-	@Column()
-	city: string;
+  @Column()
+  city: string;
 
-	@Column()
-	state: string;
+  @Column()
+  state: string;
 
-	@Column()
-	zipcode: string;
+  @Column()
+  zipcode: string;
 
-	constructor(
-		street: string,
-		streetNumber: number,
-		discrict: string,
-		city: string,
-		state: string,
-		zipcode: string
-	) {
-		this.street = street;
-		this.streetNumber = streetNumber;
-		this.discrict = discrict;
-		this.city = city;
-		this.state = state;
-		this.zipcode = zipcode;
-	}
+  constructor(
+    street: string,
+    streetNumber: string,
+    district: string,
+    city: string,
+    state: string,
+    zipcode: string
+  ) {
+    this.street = street;
+    this.streetNumber = streetNumber;
+    this.district = district;
+    this.city = city;
+    this.state = state;
+    this.zipcode = zipcode;
+  }
 }
