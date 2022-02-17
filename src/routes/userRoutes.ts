@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { UserController } from "../controllers/userController";
-import { paramsVSjwt, userExists } from "../middlewares/userMiddlewares";
+import { paramsVSjwt, userExists, userFromJwt, userIsAdm } from "../middlewares/userMiddlewares";
 import { verifyIfEmailExists } from "../middlewares/userMiddlewares";
 import validateReqFields from "../middlewares/validateFields";
 import userSchema from "../schemas/userSchema";
@@ -17,11 +17,13 @@ const userRouter = () => {
 	router.delete(
 		"/:userId",
 		userExists,
+		userFromJwt,
 		paramsVSjwt,
 		UserController.deleteUser
 	);
-	router.get("", UserController.getUsers);
-	router.get("/:userId", userExists, UserController.getUser);
+	router.get("/", userFromJwt, userIsAdm, UserController.getUsers);
+	router.get("/:userId", userExists, userFromJwt, paramsVSjwt, UserController.getUser);
+	router.post("/login", UserController.loginUser)
 
 	return router;
 };

@@ -19,3 +19,18 @@ export interface userInterface {
   address: addressInterface;
   cpf: string;
 }
+
+export interface loginInterface {
+  email: string;
+  password: string;
+  isAdm: boolean;
+}
+
+export interface jwtUserDataInterface {
+	id: string;
+	name: string;
+	email: string;
+	authorized: boolean;
+	isAdm: boolean;
+  cpf: string;
+}
