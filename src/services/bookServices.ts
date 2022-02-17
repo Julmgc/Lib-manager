@@ -12,7 +12,6 @@ export class BookServices {
 		return getCustomRepository(BookRepository);
 	};
 
-<<<<<<< HEAD
 	static async updateBook(id: string, data: any) {
 		const repository = this.bookRepository();
 		const book = await repository.findOne(id);
@@ -22,7 +21,6 @@ export class BookServices {
 		});
 	
 	}
-=======
 	static insertBook = async (body: bookInterface, userId: string) => {
 		const bookRepo = this.bookRepository();
 		const genreRepo = GenreServices.genreRepository();
@@ -86,5 +84,4 @@ export class BookServices {
 		const book = await bookRepo.find({ id });
 		return book;
 	};
->>>>>>> 4ae80ca5b8ab749243cc435527ffb0f42803f627
 }
