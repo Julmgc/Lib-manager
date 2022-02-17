@@ -3,6 +3,8 @@ import { UserServices } from "../services/userServices";
 import { ApiError } from "../utils/errors";
 import { getCustomRepository } from "typeorm";
 import UserRepository from "../repositories/userRepository";
+import jwt from 'jsonwebtoken';
+import { jwtUserDataInterface } from "../types";
 
 export const userExists = async (
 	req: Request,
@@ -30,10 +32,10 @@ export const paramsVSjwt = async (
 	try {
 		const { userId } = req.params;
 
-		if (req /*.user.isAdmin*/) {
+		if (req.userDataByToken.isAdm) {
 			return next();
 		}
-		if (userId !== req /*.user.id*/) {
+		if (userId !== req.userDataByToken.id) {
 			throw new ApiError(
 				"Admin privilegies needed to mess with others account!",
 				401
@@ -63,7 +65,7 @@ export const verifyIfEmailExists = async (
 	}
 };
 
-export const isAdm = async (
+export const userIsAdm = async (
 	req: Request,
 	res: Response,
 	next: NextFunction
@@ -73,8 +75,40 @@ export const isAdm = async (
 		if (user.isAdm) {
 			return next();
 		}
-		return res.status(401).json({ message: "Unauthorized" });
+		throw new ApiError(
+			"Admin privilegies needed to this endpoint!",
+			401
+		);
 	} catch (err) {
 		next(err);
 	}
 };
+
+export const userFromJwt = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
+	try {
+		const jwtKey = process.env.JWT_SECRET_KEY || "jwtKey";
+		const token = req.headers.authorization ? req.headers.authorization.split(' ')[1] : "";
+
+		if (!token) {
+			throw new ApiError(
+				"Headers Authorization Bearer Token needed for this endpoint!",
+				403
+			);
+		};
+
+		jwt.verify(token, jwtKey, (err, decoded) => {
+			if (err) {
+				throw new ApiError("JWT invalid or expired", 400);
+			};
+
+			req.userDataByToken = decoded as jwtUserDataInterface;
+			return next();
+		})
+	} catch (err) {
+		next(err);
+	}
+}
