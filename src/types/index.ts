@@ -19,3 +19,8 @@ export interface userInterface {
   address: addressInterface;
   cpf: string;
 }
+export interface UserUpdateInterface {
+  name: string;
+  email: string;
+  address: addressInterface;
+}
