@@ -34,8 +34,19 @@ export default class Book {
   genre!: Genre;
 
   @ManyToOne(() => User)
-  adminId!: User;
+  admin!: User;
 
   @OneToOne(() => UserBooks)
   loan!: UserBooks;
+
+  toJSON() {
+    const { admin, ...book } = this;
+    return {
+      admin: {
+        id: admin.id,
+        name: admin.name,
+      },
+      book,
+    };
+  }
 }
