@@ -15,4 +15,10 @@ export class BookController {
       next(err);
     }
   };
+
+  static deleteBookRoute = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    await BookServices.deleteBook(id);
+    return res.sendStatus(204);
+  };
 }
