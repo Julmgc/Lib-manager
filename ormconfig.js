@@ -11,7 +11,7 @@ const env = {
   password: "test",
   database: "test",
   synchronize: true,
-  logging: false,
+  logging: true,
   entities:
     process.env.NODE_ENV === "production"
       ? ["dist/src/entities/**/*.js"]

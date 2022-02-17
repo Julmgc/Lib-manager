@@ -45,7 +45,7 @@ export default class User {
     this.password = bcrypt.hashSync(this.password, 10);
   }
 
-  @OneToOne(() => Address, (address) => address.user, { eager: true })
+  @OneToOne(() => Address)
   @JoinColumn()
   address!: Address;
 

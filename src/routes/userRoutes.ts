@@ -6,23 +6,17 @@ import validateReqFields from "../middlewares/validateFields";
 import userSchema from "../schemas/userSchema";
 
 const userRouter = () => {
-  const router = Router();
-  router.post(
-    "/",
-    validateReqFields(userSchema),
-    verifyIfEmailExists,
-    UserController.postUserRoute
-  );
+	const router = Router();
+	router.post("/", validateReqFields(userSchema), verifyIfEmailExists, UserController.postUserRoute);
 
-  router.delete("/:userId", userExists, paramsVSjwt, UserController.deleteUser);
+	router.delete(
+		"/:userId",
+		userExists,
+		paramsVSjwt,
+		UserController.deleteUser
+	);
 
-  router.patch(
-    "/update",
-    userExists,
-    paramsVSjwt,
-    UserController.updateUserRoute
-  );
-  return router;
+	return router;
 };
 
 export default userRouter;
