@@ -30,7 +30,7 @@ export default class Book {
   @CreateDateColumn({ nullable: false })
   published_date!: Date;
 
-  @ManyToOne(() => Genre)
+  @ManyToOne(() => Genre, {eager: true})
   genre!: Genre;
 
   @ManyToOne(() => User)
@@ -41,12 +41,13 @@ export default class Book {
 
   toJSON() {
     const { admin, ...book } = this;
-    return {
+    const json = admin ? {
       admin: {
         id: admin.id,
         name: admin.name,
       },
       book,
-    };
+    } : book;
+    return json;
   }
 }
