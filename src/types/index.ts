@@ -19,3 +19,10 @@ export interface userInterface {
   address: addressInterface;
   cpf: string;
 }
+
+export interface bookInterface {
+  name: string;
+  author: string;
+  pages: number;
+  genreCdd: number;
+}
