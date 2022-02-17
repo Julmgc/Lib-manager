@@ -20,6 +20,12 @@ export interface userInterface {
   cpf: string;
 }
 
+export interface bookInterface {
+  name: string;
+  author: string;
+  pages: number;
+  genreCdd: number;
+}
 export interface loginInterface {
   email: string;
   password: string;
@@ -27,10 +33,10 @@ export interface loginInterface {
 }
 
 export interface jwtUserDataInterface {
-	id: string;
-	name: string;
-	email: string;
-	authorized: boolean;
-	isAdm: boolean;
+  id: string;
+  name: string;
+  email: string;
+  authorized: boolean;
+  isAdm: boolean;
   cpf: string;
 }
