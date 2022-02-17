@@ -21,6 +21,7 @@ const userRouter = () => {
 		UserController.deleteUser
 	);
 	router.get("", UserController.getUsers);
+	router.get("/:userId", userExists, UserController.getUser);
 
 	return router;
 };

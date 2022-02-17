@@ -12,14 +12,14 @@ export const userExists = async (
 	try {
 		const { userId } = req.params;
 
-		const user = UserServices; /*.findById(userId) */
+		const user = await UserServices.findById(userId); /*.findById(userId) */
 		if (user === undefined) {
 			throw new ApiError("User not found!", 404);
 		}
 		next();
 	} catch (err) {
 		next(err);
-	}
+	} 
 };
 
 export const paramsVSjwt = async (
