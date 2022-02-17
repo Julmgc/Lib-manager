@@ -8,12 +8,14 @@ import { verifyIfBookExist } from "../middlewares/booksMidllewares";
 const bookRouter = () => {
   const router = Router();
   router.post(
-    "",
+    "/",
     validateReqFields(bookSchema),
     userFromJwt,
     userIsAdm,
     BookController.postBookRoute
   );
+  router.get("/", BookController.getAll);
+
   router.delete("/:id", verifyIfBookExist, BookController.deleteBookRoute);
 
   router.post(

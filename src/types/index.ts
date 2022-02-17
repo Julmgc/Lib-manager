@@ -40,3 +40,11 @@ export interface jwtUserDataInterface {
   isAdm: boolean;
   cpf: string;
 }
+
+export interface getAllBooksQuerys {
+  page?: number;
+  per_page?: number;
+  author?: string;
+  ddc?: string;
+  category?: string;
+}
