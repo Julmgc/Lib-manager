@@ -7,8 +7,8 @@ import {
   OneToOne,
   OneToMany,
 } from "typeorm";
-import Fine from "./fineEntity";
 
+import Fine from "./fineEntity";
 import Genre from "./genreEntity";
 import UserBooks from "./userBooksEntity";
 import User from "./userEntity";
