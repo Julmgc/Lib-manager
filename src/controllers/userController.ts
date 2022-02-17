@@ -29,7 +29,7 @@ export class UserController {
       const userData = req.validatedFields as userInterface;
       const address = await AddressServices.createAdress(userData.address);
       userData.address.id = address.id;
-      const user = UserServices.createUser(userData);
+      const user = await UserServices.createUser(userData);
       return res.status(201).json(user);
     } catch (err) {
       next(err);
@@ -71,21 +71,22 @@ export class UserController {
     try {
       const { email, password, isAdm } = req.body;
 
-      const loginUserService = await UserServices.login({
+      const token = await UserServices.login({
         email,
         password,
         isAdm,
       });
 
-      const token = await loginUserService.execute({
-        email,
-        password,
-        isAdm,
-      });
+    //   const token = await loginUserService.execute({
+    //     email,
+    //     password,
+    //     isAdm,
+    //   });
 
       return res.json(token);
-    } catch (error) {
-      return res.status(401).json({ message: (<Error>error).message });
+    } catch (err) {
+		next(err)
+    //   return res.status(401).json({ message: (<Error>error).message });
     }
   };
 

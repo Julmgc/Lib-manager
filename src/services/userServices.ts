@@ -5,10 +5,11 @@ import { loginInterface, userInterface } from "../types";
 import User from "../entities/userEntity";
 import * as bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { ApiError } from "../utils/errors";
 
 const jwtConfig = {
-  secret: <string>process.env.JWT_SECRET_KEY,
-  expiresIn: "24h",
+  secret: <string>process.env.JWT_SECRET_KEY || "jwtKey",
+  expiresIn: "1y",
 };
 
 export class UserServices {
@@ -66,23 +67,21 @@ export class UserServices {
 
     if (user !== undefined) {
       const match = await bcrypt.compare(password, user.password);
-      const { password: user_password, ...userData } = user;
+      const { password: user_password, address, ...userData } = user;
       let token = jwt.sign(
-        {
-          userData,
-        },
+        userData,
         jwtConfig.secret,
         {
           expiresIn: jwtConfig.expiresIn,
         }
       );
       if (match) {
-        return { token: token };
+        return { token };
       } else {
-        throw new Error("Wrong email/password");
+        throw new ApiError("Incorrect password", 401);
       }
     } else {
-      throw new Error("Wrong email/password");
+      throw new ApiError("User not found!", 404);
     }
   };
 
@@ -91,7 +90,7 @@ export class UserServices {
     const user = await userRepository.findOne({ id: userId });
 
     if (!user) {
-      return "User not found";
+      throw new ApiError("User not found!", 404);
     }
 
     if (data.address) {

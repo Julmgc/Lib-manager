@@ -25,3 +25,12 @@ export interface loginInterface {
   password: string;
   isAdm: boolean;
 }
+
+export interface jwtUserDataInterface {
+	id: string;
+	name: string;
+	email: string;
+	authorized: boolean;
+	isAdm: boolean;
+  cpf: string;
+}

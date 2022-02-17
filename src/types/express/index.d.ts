@@ -1,10 +1,10 @@
-import { userInterface } from "..";
+import { jwtUserDataInterface, userInterface } from "..";
 
 declare global {
   namespace Express {
     export interface Request {
       validatedFields: userInterface;
-      userDataByToken: userInterface;
+      userDataByToken: jwtUserDataInterface;
     }
   }
 }
