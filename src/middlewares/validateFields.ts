@@ -4,22 +4,20 @@ import { ApiError } from "../utils/errors";
 import { userInterface } from "../types";
 
 const validateReqFields =
-	(schema: yup.ObjectSchema<any>) =>
-	async (req: Request, res: Response, next: NextFunction) => {
-		try {
-			const validatedFields = await schema.validate(req.body, {
-				abortEarly: false,
-				stripUnknown: true,
-			});
+  (schema: yup.ObjectSchema<any>) =>
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const validatedFields = await schema.validate(req.body, {
+        abortEarly: false,
+        stripUnknown: true,
+      });
 
-			req.validatedFields = validatedFields as userInterface;
+      req.validatedFields = validatedFields;
 
-			next();
-		} catch (err) {
-			next(
-				new ApiError({ [(err as any).name]: (err as any).errors }, 400)
-			);
-		}
-	};
+      next();
+    } catch (err) {
+      next(new ApiError({ [(err as any).name]: (err as any).errors }, 400));
+    }
+  };
 
 export default validateReqFields;
