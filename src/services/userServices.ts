@@ -9,11 +9,11 @@ export class UserServices {
 	};
 
 	static remove = async (id: string) => {
-		await this.userRepository().delete({id});
+		await this.userRepository().delete({ id });
 
 		return;
-	}
-  
+	};
+
 	static async createUser(userData: userInterface): Promise<User> {
 		const userRepo = this.userRepository();
 
@@ -27,6 +27,28 @@ export class UserServices {
 			cpf: userData.cpf,
 		});
 		await userRepo.save(user);
+
 		return user;
-  }
+	}
+
+	static getAllUser = async () => {
+		const repository = this.userRepository();
+		const users = await repository.find();
+
+		return users;
+	};
+
+	static getByEmail = async (email: string) => {
+		const repository = this.userRepository();
+		const user = await repository.findOne({email});
+
+		return user;
+	};
+
+	static findById =async (id: string) => {
+		const repository = this.userRepository();
+		const user = await repository.findOne({ id })
+
+		return user;
+	}
 }

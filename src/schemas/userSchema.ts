@@ -1,20 +1,30 @@
 import * as yup from "yup";
 import STATE from "../utils/statesList";
 
+const capitalize = (str: string) => {
+	return str
+		.toLowerCase()
+		.split(" ")
+		.map((word: string) => {
+			return word.charAt(0).toUpperCase() + word.slice(1);
+		})
+		.join(" ");
+};
+
 const userSchema = yup.object().shape({
-  name: yup.string().required().max(50),
-  email: yup.string().required().max(150).email(),
+  name: yup.string().required().max(50).transform((name)=> capitalize(name)),
+  email: yup.string().required().max(150).email().transform((email => email.toLowerCase())),
   password: yup.string().required(),
+  cpf: yup.string().required().length(11),
   authorized: yup
     .boolean()
-    .default(true)
-    .transform(() => true),
+    .default(true),
   isAdm: yup.boolean().default(false),
   address: yup.object().shape({
     street: yup.string().required(),
     streetNumber: yup.string().max(5).required(),
     city: yup.string().required(),
-    cpf: yup.string().required().length(11),
+
     state: yup
       .string()
       .required()

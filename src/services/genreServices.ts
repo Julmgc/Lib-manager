@@ -30,7 +30,7 @@ export class GenreServices {
 		);
 	};
 
-	static getAll = async (page: number, per_page: number = 10) => {
+	static getAll = async (page: number = 1, per_page: number = 999) => {
 		if (page) {
 			const codes = await this.genreRepository()
 				.createQueryBuilder()

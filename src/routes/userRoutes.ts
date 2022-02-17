@@ -7,7 +7,12 @@ import userSchema from "../schemas/userSchema";
 
 const userRouter = () => {
 	const router = Router();
-	router.post("/", validateReqFields(userSchema), verifyIfEmailExists, UserController.postUserRoute);
+	router.post(
+		"/",
+		validateReqFields(userSchema),
+		verifyIfEmailExists,
+		UserController.postUserRoute
+	);
 
 	router.delete(
 		"/:userId",
@@ -15,6 +20,8 @@ const userRouter = () => {
 		paramsVSjwt,
 		UserController.deleteUser
 	);
+	router.get("", UserController.getUsers);
+	router.get("/:userId", userExists, UserController.getUser);
 
 	return router;
 };
