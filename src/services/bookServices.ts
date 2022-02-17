@@ -1,4 +1,4 @@
-import { getCustomRepository } from "typeorm";
+import { getCustomRepository, ILike, Like } from "typeorm";
 import BookRepository from "../repositories/bookRepository";
 import { bookInterface, getAllBooksQuerys } from "../types/index";
 import { UserServices } from "./userServices";
@@ -38,8 +38,8 @@ export class BookServices {
 		category,
 	}: getAllBooksQuerys) => {
 		const query = {
-			author: author,
-			genre: ddc ? ddc : category ? { description: category } : undefined,
+			author: author? ILike(`%${author}%`) : undefined,
+			genre: ddc ? ddc : category ? { description: ILike(`%${category}%`) } : undefined,
 		};
 		Object.keys(query).forEach((key) => {
 			if (query[key as keyof typeof query] === undefined) {
