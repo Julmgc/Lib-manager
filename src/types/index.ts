@@ -23,4 +23,5 @@ export interface userInterface {
 export interface loginInterface {
   email: string;
   password: string;
+  isAdm: boolean;
 }

@@ -1,5 +1,6 @@
 import { getCustomRepository } from "typeorm";
 import UserRepository from "../repositories/userRepository";
+import AddressRepository from "../repositories/addressRepository";
 import { loginInterface, userInterface } from "../types";
 import User from "../entities/userEntity";
 import * as bcrypt from "bcrypt";
@@ -59,7 +60,7 @@ export class UserServices {
     return user;
   };
 
-  static login = async ({ email, password }: loginInterface) => {
+  static login = async ({ email, password, isAdm }: loginInterface) => {
     const repository = this.userRepository();
     const user = await repository.findOne({ email });
 
@@ -84,4 +85,33 @@ export class UserServices {
       throw new Error("Wrong email/password");
     }
   };
+
+  static async updateUser(data: any, userId: any) {
+    const userRepository = getCustomRepository(UserRepository);
+    const user = await userRepository.findOne({ id: userId });
+
+    if (!user) {
+      return "User not found";
+    }
+
+    if (data.address) {
+      const addressRepository = getCustomRepository(AddressRepository);
+      const address = await addressRepository.findOne({ id: user?.address.id });
+      if (!address) {
+        return "Users address not found";
+      }
+      await addressRepository.update(address?.id, data.address);
+    }
+
+    if (data.name) {
+      const userData = { name: data.name };
+      await userRepository.update(userId, userData);
+    }
+    if (data.email) {
+      const userData = { email: data.email };
+      await userRepository.update(userId, userData);
+    }
+
+    return await userRepository.findOne({ id: userId });
+  }
 }

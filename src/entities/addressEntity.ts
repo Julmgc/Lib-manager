@@ -25,6 +25,9 @@ export default class Address {
   @Column()
   zipcode: string;
 
+  @OneToOne(() => User, (user) => user.address)
+  user!: User;
+
   constructor(
     street: string,
     streetNumber: string,

@@ -71,7 +71,11 @@ export class UserController {
     try {
       const { email, password, isAdm } = req.body;
 
-      const loginUserService = await UserServices.login();
+      const loginUserService = await UserServices.login({
+        email,
+        password,
+        isAdm,
+      });
 
       const token = await loginUserService.execute({
         email,
@@ -82,6 +86,21 @@ export class UserController {
       return res.json(token);
     } catch (error) {
       return res.status(401).json({ message: (<Error>error).message });
+    }
+  };
+
+  static updateUserRoute = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const data = req.body;
+      const userId = req.userDataByToken.id;
+      const updatedUser = await UserServices.updateUser(data, userId);
+      return res.status(200).json(updatedUser);
+    } catch (err) {
+      next(err);
     }
   };
 }
