@@ -53,4 +53,20 @@ export class UserController {
 			next(err);
 		}
 	};
+
+	static getUser =async (
+		req: Request,
+		res: Response,
+		next: NextFunction
+	) => {
+		try {
+			const { userId } = req.params;
+			const user = await UserServices.findById(userId);
+
+			return res.send(user);
+		} catch (err) {
+			next(err);
+		}
+		
+	};
 }
