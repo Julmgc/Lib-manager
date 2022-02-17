@@ -63,4 +63,16 @@ export class BookServices {
 
 		return books;
 	};
+
+	static deleteBook = async (id: string) => {
+		const bookRepo = this.bookRepository();
+		await bookRepo.delete(id);
+		return;
+	};
+
+	static findOneBook = async (id: string) => {
+		const bookRepo = this.bookRepository();
+		const book = await bookRepo.find({ id });
+		return book;
+	};
 }
