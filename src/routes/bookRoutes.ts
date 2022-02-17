@@ -7,12 +7,13 @@ import { userFromJwt, userIsAdm } from "../middlewares/userMiddlewares";
 const bookRouter = () => {
   const router = Router();
   router.post(
-    "",
+    "/",
     validateReqFields(bookSchema),
     userFromJwt,
     userIsAdm,
     BookController.postBookRoute
   );
+  router.get("/", BookController.getAll);
 
   return router;
 };
