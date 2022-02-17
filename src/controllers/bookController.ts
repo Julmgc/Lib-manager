@@ -17,6 +17,12 @@ export class BookController {
     }
   };
 
+  static deleteBookRoute = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    await BookServices.deleteBook(id);
+    return res.sendStatus(204);
+  };
+
   static loanBookRoute = async (
     req: Request,
     res: Response,
