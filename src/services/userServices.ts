@@ -68,13 +68,9 @@ export class UserServices {
     if (user !== undefined) {
       const match = await bcrypt.compare(password, user.password);
       const { password: user_password, address, ...userData } = user;
-      let token = jwt.sign(
-        userData,
-        jwtConfig.secret,
-        {
-          expiresIn: jwtConfig.expiresIn,
-        }
-      );
+      let token = jwt.sign(userData, jwtConfig.secret, {
+        expiresIn: jwtConfig.expiresIn,
+      });
       if (match) {
         return { token };
       } else {
