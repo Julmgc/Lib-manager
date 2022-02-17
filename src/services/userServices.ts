@@ -1,8 +1,16 @@
 import { getCustomRepository } from "typeorm";
 import UserRepository from "../repositories/userRepository";
 import AddressRepository from "../repositories/addressRepository";
-import { userInterface } from "../types";
+import { loginInterface, userInterface } from "../types";
 import User from "../entities/userEntity";
+import * as bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import { ApiError } from "../utils/errors";
+
+const jwtConfig = {
+  secret: <string>process.env.JWT_SECRET_KEY || "jwtKey",
+  expiresIn: "1y",
+};
 
 export class UserServices {
   static userRepository = () => {
@@ -53,12 +61,36 @@ export class UserServices {
     return user;
   };
 
+  static login = async ({ email, password, isAdm }: loginInterface) => {
+    const repository = this.userRepository();
+    const user = await repository.findOne({ email });
+
+    if (user !== undefined) {
+      const match = await bcrypt.compare(password, user.password);
+      const { password: user_password, address, ...userData } = user;
+      let token = jwt.sign(
+        userData,
+        jwtConfig.secret,
+        {
+          expiresIn: jwtConfig.expiresIn,
+        }
+      );
+      if (match) {
+        return { token };
+      } else {
+        throw new ApiError("Incorrect password", 401);
+      }
+    } else {
+      throw new ApiError("User not found!", 404);
+    }
+  };
+
   static async updateUser(data: any, userId: any) {
     const userRepository = getCustomRepository(UserRepository);
     const user = await userRepository.findOne({ id: userId });
 
     if (!user) {
-      return "User not found";
+      throw new ApiError("User not found!", 404);
     }
 
     if (data.address) {
