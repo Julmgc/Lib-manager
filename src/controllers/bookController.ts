@@ -8,8 +8,7 @@ export class BookController {
   ) => {
     try {
       const bookData = req.body;
-      const userId = req.params.id; // para teste deve ser usado do token
-      //   const userId = req.userDataByToken.id;
+      const userId = req.userDataByToken.id;
       const book = await BookServices.insertBook(bookData, userId);
       return res.status(201).json(book);
     } catch (err) {
