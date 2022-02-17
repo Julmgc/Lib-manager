@@ -1,6 +1,7 @@
 import * as yup from "yup";
 import { NextFunction, Request, Response } from "express";
 import { ApiError } from "../utils/errors";
+import { userInterface } from "../types";
 
 const validateReqFields =
 	(schema: yup.ObjectSchema<any>) =>
@@ -11,7 +12,7 @@ const validateReqFields =
 				stripUnknown: true,
 			});
 
-			req.validatedFields = validatedFields;
+			req.validatedFields = validatedFields as userInterface;
 
 			next();
 		} catch (err) {

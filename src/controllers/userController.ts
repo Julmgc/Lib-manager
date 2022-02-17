@@ -4,31 +4,53 @@ import { AddressServices } from "../services/addressServices";
 import { userInterface } from "../types";
 
 export class UserController {
-  static deleteUser = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
-    const { userId } = req.params;
+	static deleteUser = async (
+		req: Request,
+		res: Response,
+		next: NextFunction
+	) => {
+		try{
+			const { userId } = req.params;
 
-    await UserServices.remove(userId);
+			await UserServices.remove(userId);
 
-    res.status(204).send();
-  };
+			res.status(204).send();
+		} catch (err) {
+			next(err);
+		}
+	};
 
-  static postUserRoute = async (req: Request, res: Response) => {
-    const userData = req.validatedFields as userInterface;
-    const address = await AddressServices.createAdress(userData.address);
-    userData.address.id = address.id;
-    const user = UserServices.createUser(userData);
-    return res.status(201).json(user);
-  };
+	static postUserRoute = async (
+		req: Request,
+		res: Response,
+		next: NextFunction
+	) => {
+		try {
+			const userData = req.validatedFields as userInterface;
+			const address = await AddressServices.createAdress(
+				userData.address
+			);
+			userData.address.id = address.id;
+			const user = UserServices.createUser(userData);
+			return res.status(201).json(user);
+		} catch (err) {
+			next(err);
+		}
+	};
 
-  static getUsers = async (resq: Request, res: Response) => {
-    const users = await UserServices.getAllUser();
-    if (!users) {
-      return res.status(404).json({ error: "No data Found" });
-    }
-    return res.status(200).json(users);
-  };
+	static getUsers = async (
+		resq: Request,
+		res: Response,
+		next: NextFunction
+	) => {
+		try {
+			const users = await UserServices.getAllUser();
+			if (!users) {
+				return res.status(404).json({ error: "No data Found" });
+			}
+			return res.status(200).json(users);
+		} catch (err) {
+			next(err);
+		}
+	};
 }

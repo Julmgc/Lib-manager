@@ -4,36 +4,44 @@ import { userInterface } from "../types";
 import User from "../entities/userEntity";
 
 export class UserServices {
-  static userRepository = () => {
-    return getCustomRepository(UserRepository);
-  };
+	static userRepository = () => {
+		return getCustomRepository(UserRepository);
+	};
 
-  static remove = async (id: string) => {
-    await this.userRepository().delete({ id });
+	static remove = async (id: string) => {
+		await this.userRepository().delete({ id });
 
-    return;
-  };
+		return;
+	};
 
-  static async createUser(userData: userInterface): Promise<User> {
-    const userRepo = this.userRepository();
+	static async createUser(userData: userInterface): Promise<User> {
+		const userRepo = this.userRepository();
 
-    const user = userRepo.create({
-      name: userData.name,
-      email: userData.email,
-      password: userData.password,
-      authorized: userData.authorized,
-      isAdm: userData.isAdm,
-      address: userData.address,
-      cpf: userData.cpf,
-    });
-    await userRepo.save(user);
-    return user;
-  }
+		const user = userRepo.create({
+			name: userData.name,
+			email: userData.email,
+			password: userData.password,
+			authorized: userData.authorized,
+			isAdm: userData.isAdm,
+			address: userData.address,
+			cpf: userData.cpf,
+		});
+		await userRepo.save(user);
 
-  static getAllUser = async () => {
-    const repository = this.userRepository();
-    const users = await repository.find();
+		return user;
+	}
 
-    return users;
-  };
+	static getAllUser = async () => {
+		const repository = this.userRepository();
+		const users = await repository.find();
+
+		return users;
+	};
+
+	static getByEmail = async (email: string) => {
+		const repository = this.userRepository();
+		const user = await repository.findOne({email});
+
+		return user;
+	};
 }
