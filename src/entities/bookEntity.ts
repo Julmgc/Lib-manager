@@ -36,7 +36,7 @@ export default class Book {
   @ManyToOne(() => User)
   admin!: User;
 
-  @OneToOne(() => UserBooks)
+  @OneToMany(() => UserBooks, (userBooks) => userBooks.book)
   loan!: UserBooks;
 
   @Column()

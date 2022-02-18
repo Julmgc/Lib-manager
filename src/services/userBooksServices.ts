@@ -24,7 +24,7 @@ export class UserBooksServices {
     }
 
     const loanedBook = await userBooksRepository.findOne({
-      where: { book: bookId.bookId, user: user.id },
+      where: { book: bookId.bookId, user: user.id, returned: false },
     });
     if (loanedBook) {
       return "This book was already loaned";
@@ -45,6 +45,7 @@ export class UserBooksServices {
       user: user,
       book: book,
       return_date: renewDateFormat,
+      returned: false,
     });
 
     await userBooksRepository.save(userBook);
@@ -59,7 +60,38 @@ export class UserBooksServices {
     await bookRepository.update(bookLoaned.id, bookData);
 
     return await userBooksRepository.findOne({
-      where: { user: user, book: book },
+      where: { user: user, book: book, returned: false },
     });
+  }
+
+  static async returnBook(bookId: string) {
+    const bookRepository = getCustomRepository(BookRepository);
+
+    const book = await bookRepository.findOne({ where: { id: bookId } });
+    if (!book) {
+      return "Book not found";
+    }
+
+    const userBooksRepository = getCustomRepository(UserBooksRepository);
+
+    const userBook = await userBooksRepository.findOne({
+      where: { book: book, returned: false },
+    });
+
+    if (!userBook) {
+      return "Book is not loaned";
+    }
+
+    var dt = new Date();
+    const returnDateFormat = dt.toISOString().substring(0, 10);
+
+    const returneBook = { returned: true, return_date: returnDateFormat };
+
+    await userBooksRepository.update(userBook.id, returneBook);
+
+    const bookData = { loaned: false };
+    await bookRepository.update(book.id, bookData);
+
+    return await bookRepository.findOne({ where: { id: bookId } });
   }
 }
