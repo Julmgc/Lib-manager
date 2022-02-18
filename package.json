@@ -24,6 +24,7 @@
 	},
 	"dependencies": {
 		"bcrypt": "^5.0.1",
+		"c-check-cpf": "^0.0.5",
 		"dotenv": "^16.0.0",
 		"express": "^4.15.4",
 		"jsonwebtoken": "^8.5.1",
