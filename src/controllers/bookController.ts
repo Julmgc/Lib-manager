@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { BookServices } from "../services/bookServices";
+import { UserBooksServices } from "../services/userBooksServices";
 export class BookController {
 	static postBookRoute = async (
 		req: Request,
@@ -16,7 +17,28 @@ export class BookController {
 		}
 	};
 
-	static getAll = async (req: Request, res: Response, next: NextFunction) => {
+  static deleteBookRoute = async (req: Request, res: Response) => {
+    const { id } = req.params;
+    await BookServices.deleteBook(id);
+    return res.sendStatus(204);
+  };
+
+  static loanBookRoute = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const data = req.body;
+      const bookId = req.params;
+      const loanedBook = await UserBooksServices.loanBook(data, bookId);
+      return res.status(201).json(loanedBook);
+    } catch (err) {
+      next(err);
+    }
+  };
+  
+  static getAll = async (req: Request, res: Response, next: NextFunction) => {
 		try {
 			const books = await BookServices.getAllBooks(req.query);
 			res.json(books);
@@ -25,25 +47,19 @@ export class BookController {
 		}
 	};
 
-	static deleteBookRoute = async (req: Request, res: Response) => {
-		const { id } = req.params;
-		await BookServices.deleteBook(id);
-		return res.sendStatus(204);
-	};
-
-    static update = async (
-        req: Request,
-        res: Response,
-        next: NextFunction
-      ) => {
-        try {
-          const data = req.body;
-          const { bookId } = req.params;
-          const updatedBook = await BookServices.updateBook(bookId, data);
-
-          return res.send(updatedBook);
-        } catch (err) {
-          next(err);
-        }
-      };
+	static update = async (
+		req: Request,
+		res: Response,
+		next: NextFunction
+	  ) => {
+		try {
+		  const data = req.body;
+		  const { id } = req.params;
+		  const updatedBook = await BookServices.updateBook(id, data);
+	
+		  return res.send(updatedBook);
+		} catch (err) {
+		  next(err);
+		}
+	  };
 }
