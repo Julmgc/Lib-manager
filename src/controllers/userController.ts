@@ -96,7 +96,7 @@ export class UserController {
     next: NextFunction
   ) => {
     try {
-      const data = req.body;
+      const data = req.validatedFields;
       const userId = req.userDataByToken.id;
       const updatedUser = await UserServices.updateUser(data, userId);
       return res.status(200).json(updatedUser);
