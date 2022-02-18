@@ -65,5 +65,6 @@ export const updateUserSchema = yup.object().shape({
 			.max(9, "Invalid CEP")
 			.min(9, "Format Should be 'xxxxx-xxx'"),
 		district: yup.string(),
-	}),
+	}).optional(),
 });
+

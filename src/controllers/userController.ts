@@ -97,10 +97,12 @@ export class UserController {
   ) => {
     try {
       const data = req.validatedFields;
+      console.log(data)
       const userId = req.userDataByToken.id;
       const updatedUser = await UserServices.updateUser(data, userId);
       return res.status(200).json(updatedUser);
     } catch (err) {
+      console.log(err)
       next(err);
     }
   };
