@@ -11,7 +11,7 @@ const capitalize = (str: string) => {
 		.join(" ");
 };
 
-const userSchema = yup.object().shape({
+export const userSchema = yup.object().shape({
   name: yup.string().required().max(50).transform((name)=> capitalize(name)),
   email: yup.string().required().max(150).email().transform((email => email.toLowerCase())),
   password: yup.string().required(),
@@ -40,4 +40,30 @@ const userSchema = yup.object().shape({
   }),
 });
 
-export default userSchema;
+export const updateUserSchema = yup.object().shape({
+	name: yup
+		.string()
+		.max(50)
+		.transform((name) => capitalize(name)),
+	email: yup
+		.string()
+		.max(150)
+		.email()
+		.transform((email) => email.toLowerCase()),
+	password: yup.string(),
+	address: yup.object().shape({
+		street: yup.string(),
+		streetNumber: yup.string().max(5),
+		city: yup.string(),
+		state: yup
+			.string()
+			.transform((value: string): string => value.toUpperCase())
+			.max(2)
+			.oneOf(STATE, "Invalid State, State format 'XX'"),
+		zipcode: yup
+			.string()
+			.max(9, "Invalid CEP")
+			.min(9, "Format Should be 'xxxxx-xxx'"),
+		district: yup.string(),
+	}),
+});
