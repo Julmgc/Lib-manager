@@ -27,9 +27,10 @@ export class UserController {
   ) => {
     try {
       const userData = req.validatedFields as userInterface;
+    
       const address = await AddressServices.createAdress(userData.address);
       userData.address.id = address.id;
-      const user = await UserServices.createUser(userData);
+      const user = await UserServices.createUser(userData, res);
       return res.status(201).json(user);
     } catch (err) {
       next(err);
@@ -77,16 +78,9 @@ export class UserController {
         isAdm,
       });
 
-      //   const token = await loginUserService.execute({
-      //     email,
-      //     password,
-      //     isAdm,
-      //   });
-
       return res.json(token);
     } catch (err) {
       next(err);
-      //   return res.status(401).json({ message: (<Error>error).message });
     }
   };
 
