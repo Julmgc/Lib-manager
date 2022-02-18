@@ -46,4 +46,20 @@ export class BookController {
 			next(err);
 		}
 	};
+
+	static update = async (
+		req: Request,
+		res: Response,
+		next: NextFunction
+	  ) => {
+		try {
+		  const data = req.body;
+		  const { id } = req.params;
+		  const updatedBook = await BookServices.updateBook(id, data);
+	
+		  return res.send(updatedBook);
+		} catch (err) {
+		  next(err);
+		}
+	  };
 }
