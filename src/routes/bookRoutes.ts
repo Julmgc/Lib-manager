@@ -15,7 +15,7 @@ const bookRouter = () => {
     BookController.postBookRoute
   );
   router.get("/", BookController.getAll);
-
+  router.patch("/:id", verifyIfBookExist, BookController.update);
   router.delete("/:id", verifyIfBookExist, BookController.deleteBookRoute);
 
   router.post(

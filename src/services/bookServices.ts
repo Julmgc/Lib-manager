@@ -75,4 +75,15 @@ export class BookServices {
 		const book = await bookRepo.find({ id });
 		return book;
 	};
+
+	static async updateBook(id: string, data: any) {
+		const repository = this.bookRepository();
+		const book = await repository.findOne(id);
+	
+		return await repository.save({
+			...book, ...data
+		});
+	
+	};
 }
+
