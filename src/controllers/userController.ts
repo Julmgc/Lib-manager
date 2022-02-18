@@ -77,16 +77,16 @@ export class UserController {
         isAdm,
       });
 
-    //   const token = await loginUserService.execute({
-    //     email,
-    //     password,
-    //     isAdm,
-    //   });
+      //   const token = await loginUserService.execute({
+      //     email,
+      //     password,
+      //     isAdm,
+      //   });
 
       return res.json(token);
     } catch (err) {
-		next(err)
-    //   return res.status(401).json({ message: (<Error>error).message });
+      next(err);
+      //   return res.status(401).json({ message: (<Error>error).message });
     }
   };
 
@@ -97,12 +97,10 @@ export class UserController {
   ) => {
     try {
       const data = req.validatedFields;
-      console.log(data)
       const userId = req.userDataByToken.id;
       const updatedUser = await UserServices.updateUser(data, userId);
       return res.status(200).json(updatedUser);
     } catch (err) {
-      console.log(err)
       next(err);
     }
   };

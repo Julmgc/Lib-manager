@@ -11,19 +11,21 @@ const validateReqFields =
         abortEarly: false,
         stripUnknown: true,
       });
-      Object.keys(validatedFields.address).forEach(key => {
-        if (
-			validatedFields.address[
-				key as keyof typeof validatedFields.address
-			] === undefined
-		) {
-			delete validatedFields.address[
-				key as keyof typeof validatedFields.address
-			];
-		}
-      })
-      if (Object.keys(validatedFields.address).length < 1) {
-        delete validatedFields['address']
+      if (validatedFields.address) {
+        Object.keys(validatedFields.address).forEach((key) => {
+          if (
+            validatedFields.address[
+              key as keyof typeof validatedFields.address
+            ] === undefined
+          ) {
+            delete validatedFields.address[
+              key as keyof typeof validatedFields.address
+            ];
+          }
+        });
+        if (Object.keys(validatedFields.address).length < 1) {
+          delete validatedFields["address"];
+        }
       }
       req.validatedFields = validatedFields;
 
