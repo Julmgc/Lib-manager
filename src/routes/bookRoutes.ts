@@ -24,6 +24,13 @@ const bookRouter = () => {
     userIsAdm,
     BookController.loanBookRoute
   );
+
+  router.post(
+    "/return/:bookId",
+    userFromJwt,
+    userIsAdm,
+    BookController.returnBookRoute
+  );
   return router;
 };
 

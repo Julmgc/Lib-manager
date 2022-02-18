@@ -62,4 +62,30 @@ export class UserBooksServices {
       where: { user: user, book: book },
     });
   }
+
+  static async returnBook(bookId: string) {
+    const bookRepository = getCustomRepository(BookRepository);
+
+    const book = await bookRepository.findOne({ where: { id: bookId } });
+    if (!book) {
+      return "Book not found";
+    }
+
+    const userBooksRepository = getCustomRepository(UserBooksRepository);
+
+    const userBook = await userBooksRepository.findOne({
+      book,
+    });
+
+    if (!userBook) {
+      return "Book is not loaned";
+    }
+
+    await userBooksRepository.delete(userBook.id);
+
+    const bookData = { loaned: false };
+    await bookRepository.update(book.id, bookData);
+
+    return await bookRepository.findOne({ where: { id: bookId } });
+  }
 }
