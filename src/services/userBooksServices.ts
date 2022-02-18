@@ -49,6 +49,15 @@ export class UserBooksServices {
 
     await userBooksRepository.save(userBook);
 
+    const bookLoaned = await bookRepository.findOne({
+      where: { id: bookId.bookId },
+    });
+    if (!bookLoaned) {
+      return "Book not found";
+    }
+    const bookData = { loaned: true };
+    await bookRepository.update(bookLoaned.id, bookData);
+
     return await userBooksRepository.findOne({
       where: { user: user, book: book },
     });
