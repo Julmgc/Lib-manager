@@ -21,7 +21,7 @@ export class RetrieveServices {
     });
     if (user) {
       if (!emailCode) {
-        const codeEmail = await emailRepo.create({
+        const codeEmail = emailRepo.create({
           code: genCode(),
           user: user,
         });

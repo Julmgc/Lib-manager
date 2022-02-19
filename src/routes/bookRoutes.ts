@@ -31,6 +31,8 @@ const bookRouter = () => {
     userIsAdm,
     BookController.returnBookRoute
   );
+
+  router.post("/renew/:bookId", userFromJwt, BookController.renewBook)
   return router;
 };
 

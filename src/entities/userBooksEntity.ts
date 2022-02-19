@@ -1,35 +1,45 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
-  ManyToOne,
-  Column,
-  OneToOne,
-  JoinColumn,
+	Entity,
+	PrimaryGeneratedColumn,
+	ManyToOne,
+	Column,
+	JoinColumn,
+	CreateDateColumn,
 } from "typeorm";
 import Book from "./bookEntity";
 import User from "./userEntity";
 
 @Entity("user_books")
 export default class UserBooks {
-  @PrimaryGeneratedColumn("increment")
-  id!: number;
+	@PrimaryGeneratedColumn("increment")
+	id!: number;
 
-  @ManyToOne(() => User, (user) => user.loanedBooks)
-  user!: User;
+	@ManyToOne(() => User, (user) => user.loanedBooks)
+	user!: User;
 
-  @ManyToOne(() => Book)
-  @JoinColumn()
-  book!: Book;
+	@ManyToOne(() => Book, { eager: true })
+	@JoinColumn()
+	book!: Book;
 
-  @Column("date", { default: new Date() })
-  checkout_date!: Date;
+	@CreateDateColumn()
+	checkout_date!: Date;
 
-  @Column("date", { default: new Date() })
-  return_date!: Date;
+	@Column("date", {
+		default: new Date(new Date().setDate(new Date().getDate() + 7)),
+	})
+	return_date!: Date;
 
-  @Column("date", { nullable: true })
-  renew_date!: Date;
+	@Column({ default: false })
+	renewed!: boolean;
 
-  @Column({ default: false })
-  returned!: boolean;
+	@Column({ default: false })
+	returned!: boolean;
+
+	bookId?: string;
+
+	toJSON() {
+		const { book, ...data } = this;
+		data["bookId"] = this.book.id;
+		return data;
+	}
 }
