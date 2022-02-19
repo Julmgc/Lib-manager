@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import { BookServices } from "../services/bookServices";
-import { UserBooksServices } from "../services/userBooksServices";
+
 export class BookController {
-	static postBookRoute = async (
+	static postBook = async (
 		req: Request,
 		res: Response,
 		next: NextFunction
@@ -17,26 +17,10 @@ export class BookController {
 		}
 	};
 
-	static deleteBookRoute = async (req: Request, res: Response) => {
+	static deleteBook = async (req: Request, res: Response) => {
 		const { id } = req.params;
 		await BookServices.deleteBook(id);
 		return res.sendStatus(204);
-	};
-
-	static loanBookRoute = async (
-		req: Request,
-		res: Response,
-		next: NextFunction
-	) => {
-		try {
-			const data = req.body;
-			const bookId = req.params;
-			const loanedBook = await UserBooksServices.loanBook(data, bookId);
-			return res.status(201).json(loanedBook);
-		} catch (err) {
-            console.log(err)
-			next(err);
-		}
 	};
 
 	static getAll = async (req: Request, res: Response, next: NextFunction) => {
@@ -60,35 +44,4 @@ export class BookController {
 		}
 	};
 
-	static returnBookRoute = async (
-		req: Request,
-		res: Response,
-		next: NextFunction
-	) => {
-		try {
-			const { bookId } = req.params;
-
-			const returnedBook = await UserBooksServices.returnBook(bookId);
-
-			return res.send(returnedBook);
-		} catch (err) {
-			next(err);
-		}
-	};
-
-    static renewBook = async (
-		req: Request,
-		res: Response,
-		next: NextFunction
-	) => {
-        try {
-            const { bookId } = req.params;
-            const renew = await UserBooksServices.renew(bookId);
-
-            res.json(renew);
-        } catch (err) {
-            console.log(err)
-            next(err);
-        }
-    }
-}
+};

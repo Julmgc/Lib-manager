@@ -7,32 +7,21 @@ import { verifyIfBookExist } from "../middlewares/booksMidllewares";
 
 const bookRouter = () => {
   const router = Router();
+  
   router.post(
     "/",
     validateReqFields(bookSchema),
     userFromJwt,
     userIsAdm,
-    BookController.postBookRoute
+    BookController.postBook
   );
+
   router.get("/", BookController.getAll);
+
   router.patch("/:id", verifyIfBookExist, BookController.update);
-  router.delete("/:id", verifyIfBookExist, BookController.deleteBookRoute);
 
-  router.post(
-    "/loan/:bookId",
-    userFromJwt,
-    userIsAdm,
-    BookController.loanBookRoute
-  );
+  router.delete("/:id", verifyIfBookExist, BookController.deleteBook);
 
-  router.post(
-    "/return/:bookId",
-    userFromJwt,
-    userIsAdm,
-    BookController.returnBookRoute
-  );
-
-  router.post("/renew/:bookId", userFromJwt, BookController.renewBook)
   return router;
 };
 
