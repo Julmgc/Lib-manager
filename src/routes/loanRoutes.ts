@@ -21,6 +21,10 @@ const loanRouter = () => {
 
     router.post("/renew/:bookId", userFromJwt, LoanController.renewBook);
 
+    router.get("/loan", LoanController.listLoaned);
+
+    router.get("/loan/:userId", LoanController.loanedByUser);
+
     return router;
 };
 

@@ -49,5 +49,35 @@ export class LoanController {
 			next(err);
 		}
 	};
+
+	static listLoaned = async (
+		req: Request,
+		res: Response,
+		next: NextFunction
+	) => {
+		try {
+			const loanedBooks = await UserBooksServices.getAllLoaneds();
+
+			res.json(loanedBooks);
+		} catch (err) {
+			next(err);
+		}
+	};
+
+	static loanedByUser = async (
+		req: Request,
+		res: Response,
+		next: NextFunction
+	) => {
+		try {
+			const {userId} = req.params;
+
+            const loanedBooks = await UserBooksServices.getLoaned(userId);
+
+			res.json(loanedBooks);
+		} catch (err) {
+			next(err);
+		}
+	};
 };
 
