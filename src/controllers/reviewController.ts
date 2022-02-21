@@ -40,6 +40,15 @@ export class ReviewController {
     next: NextFunction
   ) => {
     try {
+      const data = req.body;
+      const { reviewId } = req.params;
+      const userId = req.userDataByToken.id;
+      const updatedReview = await ReviewServices.updateReview(
+        reviewId,
+        data,
+        userId
+      );
+      return res.status(201).json(updatedReview);
     } catch (err) {
       next(err);
     }

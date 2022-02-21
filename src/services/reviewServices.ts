@@ -4,7 +4,7 @@ import ReviewRepository from "../repositories/reviewRepository";
 import { review } from "../types/index";
 import { UserServices } from "./userServices";
 import { BookServices } from "./bookServices";
-
+import { ApiError } from "../utils/errors";
 export class ReviewServices {
   static reviewRepository = () => {
     return getCustomRepository(ReviewRepository);
@@ -61,4 +61,19 @@ export class ReviewServices {
     await reviewRepo.save(review);
     return review;
   };
+
+  static async updateReview(reviewId: string, data: any, userId: any) {
+    const repository = this.reviewRepository();
+    const review = await repository.findOne(reviewId);
+    if (review?.user.id == userId) {
+      await repository.save({
+        ...review,
+        ...data,
+      });
+      const updatedReview = await repository.findOne(reviewId);
+      return updatedReview;
+    } else {
+      throw new ApiError("You can only update your own review", 401);
+    }
+  }
 }
