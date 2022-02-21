@@ -9,16 +9,16 @@ export interface addressInterface {
 }
 
 export interface userInterface {
-	id?: string;
-	name: string;
-	email: string;
-	password: string;
-	loanedBooks: number;
-	authorized: boolean;
-	isAdm: boolean;
-	address: addressInterface;
-	cpf: string;
-	birthDate: string;
+  id?: string;
+  name: string;
+  email: string;
+  password: string;
+  loanedBooks: number;
+  authorized: boolean;
+  isAdm: boolean;
+  address: addressInterface;
+  cpf: string;
+  birthDate: string;
 }
 
 export interface bookInterface {
@@ -40,7 +40,6 @@ export interface jwtUserDataInterface {
   authorized: boolean;
   isAdm: boolean;
   cpf: string;
-  
 }
 
 export interface getAllBooksQuerys {
@@ -49,4 +48,9 @@ export interface getAllBooksQuerys {
   author?: string;
   ddc?: string;
   category?: string;
+}
+
+export interface review {
+  rating: number;
+  reviewContent: string;
 }
