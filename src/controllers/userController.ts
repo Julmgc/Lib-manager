@@ -27,7 +27,7 @@ export class UserController {
   ) => {
     try {
       const userData = req.validatedFields as userInterface;
-    
+
       const address = await AddressServices.createAdress(userData.address);
       userData.address.id = address.id;
       const user = await UserServices.createUser(userData, res);

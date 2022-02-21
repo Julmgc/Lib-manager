@@ -1,6 +1,7 @@
 import emailRepository from "../repositories/emailCodeRepository";
 import { getCustomRepository } from "typeorm";
 import { UserServices } from "./userServices";
+import EmailCode from "../entities/emailCodeEntity";
 
 export const genCode = () => {
   return Math.random().toString(36).substring(2, 8).toUpperCase();
@@ -39,5 +40,15 @@ export class RetrieveServices {
         return codeEmailNew;
       }
     }
+  };
+  static getCode = async (email: string): Promise<EmailCode | undefined> => {
+    const codeRepo = this.emailRepository();
+    const user = await UserServices.getByEmail(email);
+    const code = codeRepo.findOne({
+      where: {
+        user: user,
+      },
+    });
+    return code;
   };
 }
