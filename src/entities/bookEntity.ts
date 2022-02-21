@@ -1,3 +1,4 @@
+import internal from "stream";
 import {
   Entity,
   Column,
@@ -7,6 +8,7 @@ import {
   OneToOne,
   OneToMany,
 } from "typeorm";
+import { bookInterface } from "../types";
 
 import Fine from "./fineEntity";
 import Genre from "./genreEntity";
@@ -44,15 +46,14 @@ export default class Book {
 
   toJSON() {
     const { admin, ...book } = this;
-    const json = admin
-      ? {
-          admin: {
-            id: admin.id,
-            name: admin.name,
-          },
-          book,
-        }
-      : book;
+    const json: any = {
+      admin: {
+        id: admin.id,
+        name: admin.name,
+      },
+      book,
+    };
+
     return json;
   }
 }

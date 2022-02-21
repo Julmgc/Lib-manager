@@ -33,7 +33,7 @@ export default class Review {
 
   toJSON() {
     const { user, book, ...review } = this;
-    const json = user
+    const json: any = user
       ? { user: { id: user.id, name: user.name }, book, review }
       : review;
     return json;
