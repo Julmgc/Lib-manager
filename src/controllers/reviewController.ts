@@ -35,7 +35,18 @@ export class ReviewController {
       next(err);
     }
   };
-
+  static getAllReviews = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const reviews = await ReviewServices.getAllReviews();
+      res.json(reviews);
+    } catch (err) {
+      next(err);
+    }
+  };
   static getUserReviews = async (
     req: Request,
     res: Response,

@@ -32,4 +32,9 @@ export class ReviewServices {
 
     return reviews;
   };
+  static getAllReviews = async (): Promise<Array<Review> | undefined> => {
+    const reviewRepo = this.reviewRepository();
+    const reviews = await reviewRepo.find();
+    return reviews;
+  };
 }

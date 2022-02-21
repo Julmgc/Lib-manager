@@ -10,6 +10,8 @@ const reviewRouter = () => {
 
   router.get("/user/:userId", userExists, ReviewController.getUserReviews);
 
+  router.get("", ReviewController.getAllReviews);
+
   return router;
 };
 
