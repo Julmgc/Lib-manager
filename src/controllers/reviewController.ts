@@ -44,13 +44,27 @@ export class ReviewController {
       next(err);
     }
   };
-
+  static getAllReviews = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const reviews = await ReviewServices.getAllReviews();
+      res.json(reviews);
+    } catch (err) {
+      next(err);
+    }
+  };
   static getUserReviews = async (
     req: Request,
     res: Response,
     next: NextFunction
   ) => {
     try {
+      const userId = req.params.userId;
+      const reviews = await ReviewServices.getUserReviews(userId);
+      res.json(reviews);
     } catch (err) {
       next(err);
     }
@@ -62,7 +76,7 @@ export class ReviewController {
   ) => {
     try {
       const id = req.params.id;
-      const reviews = await ReviewServices.getReviews(id);
+      const reviews = await ReviewServices.getBooksReviews(id);
       res.json(reviews);
     } catch (err) {
       next(err);
