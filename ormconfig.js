@@ -14,11 +14,11 @@ const env = {
   logging: false,
   entities:
     process.env.NODE_ENV === "production"
-      ? ["dist/src/entities/**/*.js"]
+      ? ["dist/entities/**/*.js"]
       : ["src/entities/**/*.ts"],
   migrations:
     process.env.NODE_ENV === "production"
-      ? ["dist/src/database/migration/**/*.js"]
+      ? ["dist/database/migration/**/*.js"]
       : ["src/database/migration/**/*.ts"],
   cli: {
     entitiesDir: "src/entities",
