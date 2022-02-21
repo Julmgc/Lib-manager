@@ -1,30 +1,33 @@
 import {
-	Entity,
-	PrimaryGeneratedColumn,
-	CreateDateColumn,
-	ManyToOne,
+  Entity,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  ManyToOne,
+  Column,
 } from "typeorm";
 import User from "./userEntity";
 import Book from "./bookEntity";
 
 @Entity("reviews")
 export default class Review {
-	@PrimaryGeneratedColumn("uuid")
-	id!: string;
+  @PrimaryGeneratedColumn("uuid")
+  id!: string;
 
-	@ManyToOne(() => User, { eager: true })
-	user!: User;
+  @ManyToOne(() => User, { eager: true })
+  user!: User;
 
-	// @Column()
-	// bookId: string;
+  @ManyToOne(() => Book, { eager: true })
+  book!: Book;
 
-	@ManyToOne(() => Book, { eager: true })
-	book!: Book;
+  @CreateDateColumn()
+  createdOn!: Date;
 
-	@CreateDateColumn()
-	createdOn!: Date;
+  @Column("number")
+  rating!: number;
 
-	// constructor(bookId: string) {
-	//   this.bookId = bookId;
-	// }
+  @Column()
+  reviewContent!: string;
+  // constructor(bookId: string) {
+  //   this.bookId = bookId;
+  // }
 }
