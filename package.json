@@ -37,7 +37,7 @@
     "yup": "^0.32.11"
   },
   "scripts": {
-    "start": "node dist/src/server.js",
+    "start": "node dist/server.js",
     "typeorm": "ts-node-dev ./node_modules/typeorm/cli.js",
     "dev": "ts-node-dev src/server.ts",
     "use": "npm run dev",
