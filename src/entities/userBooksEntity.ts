@@ -14,7 +14,7 @@ export default class UserBooks {
 	@PrimaryGeneratedColumn("increment")
 	id!: number;
 
-	@ManyToOne(() => User, (user) => user.loanedBooks)
+	@ManyToOne(() => User, (user) => user.loanedBooks, {eager: true})
 	user!: User;
 
 	@ManyToOne(() => Book, { eager: true })
@@ -36,10 +36,12 @@ export default class UserBooks {
 	returned!: boolean;
 
 	bookId?: string;
+	userId?: string;
 
 	toJSON() {
-		const { book, ...data } = this;
+		const { book, user, ...data } = this;
 		data["bookId"] = this.book.id;
+		data["userId"] = this.user.id;
 		return data;
 	}
 }

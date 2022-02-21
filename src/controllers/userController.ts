@@ -20,7 +20,7 @@ export class UserController {
     }
   };
 
-  static postUserRoute = async (
+  static postUser = async (
     req: Request,
     res: Response,
     next: NextFunction
@@ -84,7 +84,7 @@ export class UserController {
     }
   };
 
-  static updateUserRoute = async (
+  static updateUser = async (
     req: Request,
     res: Response,
     next: NextFunction

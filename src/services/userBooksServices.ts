@@ -86,10 +86,10 @@ export class UserBooksServices {
 
 		if (!loaned) {
 			throw new ApiError("This book is not on loan!", 400);
-		}
+		};
 		if (loaned.renewed) {
 			throw new ApiError("It's not possible to renew twice!", 400);
-		}
+		};
 
 		const oldDate = new Date(loaned.return_date);
 		loaned.return_date = new Date(oldDate.setDate(oldDate.getDate() + 7));
@@ -97,5 +97,29 @@ export class UserBooksServices {
 		await this.userBooksRepository().save(loaned);
 
 		return loaned;
+	};
+
+	static getLoaned = async (userId: string) => {
+		const loanedBooks = await this.userBooksRepository().find({
+			where: { returned: false, user: { id: userId } },
+		});
+
+		if (loanedBooks.length < 1) {
+			throw new ApiError("No loans found for this user!", 404);
+		};
+
+		return loanedBooks;
+	};
+
+	static getAllLoaneds = async () => {
+		const loanedBooks = await this.userBooksRepository().find({
+			where: { returned: false },
+		});
+
+		if (loanedBooks.length < 1) {
+			throw new ApiError("No loans found!", 404);
+		};
+		
+		return loanedBooks;
 	};
 }
