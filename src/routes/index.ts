@@ -14,7 +14,7 @@ const startRoutes = (app: Express) => {
   app.use("/retrieve", retrieveRouter());
   app.use("/change", changePasswordRouter());
   app.use("/book", loanRouter());
-  app.use("review", reviewRouter());
+  app.use("reviews", reviewRouter());
 
   return app;
 };
