@@ -22,7 +22,7 @@ export default class Review {
   @CreateDateColumn()
   createdOn!: Date;
 
-  @Column("number")
+  @Column("int")
   rating!: number;
 
   @Column()
@@ -30,4 +30,12 @@ export default class Review {
   // constructor(bookId: string) {
   //   this.bookId = bookId;
   // }
+
+  toJSON() {
+    const { user, book, ...review } = this;
+    const json = user
+      ? { user: { id: user.id, name: user.name }, book, review }
+      : review;
+    return json;
+  }
 }
