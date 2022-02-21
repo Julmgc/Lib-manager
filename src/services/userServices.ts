@@ -20,9 +20,11 @@ export class UserServices {
 	};
 
 	static remove = async (id: string) => {
+		
 		await this.userRepository().delete({ id });
 
 		return;
+		
 	};
 
 	static async createUser(

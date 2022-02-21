@@ -2,6 +2,10 @@ import emailRepository from "../repositories/emailCodeRepository";
 import { getCustomRepository } from "typeorm";
 import { UserServices } from "./userServices";
 
+export const genCode = () => {
+  return Math.random().toString(36).substring(2, 8).toUpperCase();
+};
+
 export class RetrieveServices {
   static emailRepository = () => {
     return getCustomRepository(emailRepository);
@@ -17,13 +21,15 @@ export class RetrieveServices {
     });
     if (user) {
       if (!emailCode) {
-        const codeEmail = await emailRepo.create({
+        const codeEmail = emailRepo.create({
+          code: genCode(),
           user: user,
         });
 
         await emailRepo.save(codeEmail);
         return codeEmail;
       } else {
+        emailCode.code = genCode();
         await emailRepo.save(emailCode);
         const codeEmailNew = emailRepo.findOne({
           where: {

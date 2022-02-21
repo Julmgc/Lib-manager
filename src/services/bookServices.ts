@@ -77,7 +77,11 @@ export class BookServices {
 
   static findOneBook = async (id: string) => {
     const bookRepo = this.bookRepository();
-    const book = await bookRepo.find({ id });
+    const book = await bookRepo.findOne({ id });
+
+    if (!book) {
+      throw new ApiError("Book not found!", 404);
+    }
     return book;
   };
 
