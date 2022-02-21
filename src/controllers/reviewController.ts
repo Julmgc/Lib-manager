@@ -9,6 +9,15 @@ export class ReviewController {
     next: NextFunction
   ) => {
     try {
+      const userId = req.userDataByToken.id;
+      const bookId = req.params.bookId;
+      const reviewBody = req.body;
+      const review = await ReviewServices.insertReviews(
+        bookId,
+        userId,
+        reviewBody
+      );
+      return res.status(201).json(review);
     } catch (err) {
       next(err);
     }
