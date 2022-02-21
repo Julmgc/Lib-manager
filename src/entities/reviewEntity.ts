@@ -1,30 +1,41 @@
 import {
-	Entity,
-	PrimaryGeneratedColumn,
-	CreateDateColumn,
-	ManyToOne,
+  Entity,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  ManyToOne,
+  Column,
 } from "typeorm";
 import User from "./userEntity";
 import Book from "./bookEntity";
 
 @Entity("reviews")
 export default class Review {
-	@PrimaryGeneratedColumn("uuid")
-	id!: string;
+  @PrimaryGeneratedColumn("uuid")
+  id!: string;
 
-	@ManyToOne(() => User, { eager: true })
-	user!: User;
+  @ManyToOne(() => User, { eager: true })
+  user!: User;
 
-	// @Column()
-	// bookId: string;
+  @ManyToOne(() => Book, { eager: true })
+  book!: Book;
 
-	@ManyToOne(() => Book, { eager: true })
-	book!: Book;
+  @CreateDateColumn()
+  createdOn!: Date;
 
-	@CreateDateColumn()
-	createdOn!: Date;
+  @Column("int")
+  rating!: number;
 
-	// constructor(bookId: string) {
-	//   this.bookId = bookId;
-	// }
+  @Column()
+  reviewContent!: string;
+  // constructor(bookId: string) {
+  //   this.bookId = bookId;
+  // }
+
+  toJSON() {
+    const { user, book, ...review } = this;
+    const json = user
+      ? { user: { id: user.id, name: user.name }, book, review }
+      : review;
+    return json;
+  }
 }

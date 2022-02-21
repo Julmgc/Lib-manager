@@ -7,7 +7,7 @@ import { verifyIfBookExist } from "../middlewares/booksMidllewares";
 
 const bookRouter = () => {
   const router = Router();
-  
+
   router.post(
     "/",
     validateReqFields(bookSchema),
