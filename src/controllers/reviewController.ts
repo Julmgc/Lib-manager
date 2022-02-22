@@ -29,6 +29,9 @@ export class ReviewController {
     next: NextFunction
   ) => {
     try {
+      const { reviewId } = req.params;
+      await ReviewServices.deleteReview(reviewId)
+      return res.status(204);
     } catch (err) {
       next(err);
     }

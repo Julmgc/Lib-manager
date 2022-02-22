@@ -76,4 +76,13 @@ export class ReviewServices {
       throw new ApiError("You can only update your own review", 401);
     }
   }
+
+  static async deleteReview(reviewId: string) {
+    const repository = this.reviewRepository();
+    const review = await repository.findOne(reviewId)
+    if(!review) {
+      throw new ApiError("Review not found!", 401)
+    }
+    return await repository.delete(reviewId);
+  }
 }

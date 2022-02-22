@@ -23,6 +23,8 @@ const reviewRouter = () => {
   router.get("", ReviewController.getAllReviews);
 
   router.patch("/:reviewId", userFromJwt, ReviewController.updateReview);
+
+  router.delete("/:reviewId", ReviewController.deleteReview)
   return router;
 };
 
