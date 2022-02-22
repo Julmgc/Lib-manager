@@ -30,4 +30,29 @@ export class EmailController {
       next(err);
     }
   };
+
+  static sendEmail = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try{
+      const { email, message } = req.body;
+      const emailOptions = {
+        from: process.env.MAILER_USER,
+        to: email,
+        template: "retrieve",
+        context: {
+          message: message
+        },
+      };
+      
+      const transport = MailerServices.transport();
+      transport.sendMail(emailOptions);
+      return res.status(200).json({ message: "Send email" });
+    } catch (err) {
+      next(err);
+    }
+  };
+
 }
