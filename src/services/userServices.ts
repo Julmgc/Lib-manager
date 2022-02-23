@@ -19,12 +19,6 @@ export class UserServices {
     return getCustomRepository(UserRepository);
   };
 
-  static remove = async (id: string) => {
-    await this.userRepository().delete({ id });
-
-    return;
-  };
-
   static async createUser(
     userData: userInterface,
     res: Response
