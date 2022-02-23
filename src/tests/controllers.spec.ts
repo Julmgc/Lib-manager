@@ -218,5 +218,75 @@ describe("Controller Tests for Admin", () => {
     expect(response.body).toEqual(
       expect.arrayContaining([expect.objectContaining({ bookId: bookId })])
     );
+  it("Should Create a Review", async () => {
+    const reviewData = {
+      rating: 2,
+      reviewContent: "Livro muito bom, pena que é ruim",
+    };
+    const response = await request(app)
+      .post(`/reviews/book/${bookId}`)
+      .send(reviewData)
+      .set({ Authorization: `Bearer ${token}` });
+
+    expect(response.status).toBe(201);
+
+    expect(response.body.review).toHaveProperty("rating");
+    expect(response.body.review).toHaveProperty("reviewContent");
+    expect(response.body.review).toHaveProperty("id");
+    expect(response.body.review).toHaveProperty("createdOn");
+    expect(response.body).toHaveProperty("user");
+    expect(response.body).toHaveProperty("book");
+
+    expect(response.body.review.reviewContent).toBe(reviewData.reviewContent);
+    expect(response.body.review.rating).toBe(reviewData.rating);
+
+    reviewId = response.body.review.id;
+  });
+  it("Should get all the book reviews"),
+    async () => {
+      const response = await request(app)
+        .get(`/reviews/book/${bookId}`)
+        .set({ Authorization: `Bearer ${token}` });
+
+      expect(response.status).toBe(200);
+      expect(response.body).toHaveLength(1);
+    };
+  it("Should get all the reviews", async () => {
+    const response = await request(app)
+      .get("/reviews")
+      .set({ Authorization: `Bearer ${token}` });
+
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveLength(1);
+  });
+  it("Should get all the user reviews", async () => {
+    const response = await request(app)
+      .get(`/reviews/user/${userId}`)
+      .set({ Authorization: `Bearer ${token}` });
+
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveLength(1);
+  });
+
+  it("Should update a review", async () => {
+    const updateData = {
+      rating: 4,
+    };
+
+    const response = await request(app)
+      .patch(`/reviews/${reviewId}`)
+      .send(updateData)
+      .set({ Authorization: `Bearer ${token}` });
+    expect(response.status).toBe(202);
+    expect(response.body).toHaveProperty("rating");
+    expect(response.body.rating).toBe(4);
+  });
+
+  it("Should delete a review", async () => {
+    const response = await request(app)
+      .delete(`/reviews/${reviewId}`)
+      .set({ Authorization: `Bearer ${token}` });
+
+    expect(response.status).toBe(204);
   });
 });
