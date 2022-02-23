@@ -6,7 +6,7 @@ import { GenreServices } from "./genreServices";
 import Genre from "../entities/genreEntity";
 import genreRouter from "../routes/genreRoutes";
 import { ApiError } from "../utils/errors";
-
+import UserBooksRepository from "../repositories/userBooksRepository";
 export class BookServices {
   static bookRepository = () => {
     return getCustomRepository(BookRepository);
@@ -70,7 +70,17 @@ export class BookServices {
   };
 
   static deleteBook = async (id: string) => {
+    console.log(id);
+    // const userBookRepo = getCustomRepository(UserBooksRepository);
+    // await userBookRepo.delete(id);
     const bookRepo = this.bookRepository();
+    const book = await bookRepo.findOne({ id });
+    if (book?.loaned) {
+      throw new ApiError(
+        "You can't delete a book that is currently loaned",
+        403
+      );
+    }
     await bookRepo.delete(id);
     return;
   };

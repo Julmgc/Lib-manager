@@ -28,7 +28,7 @@ export default class User {
   @Column()
   password: string;
 
-  @Column({ unique: true})
+  @Column({ unique: true })
   cpf: string;
 
   @OneToMany(() => UserBooks, (userBooks) => userBooks.user)

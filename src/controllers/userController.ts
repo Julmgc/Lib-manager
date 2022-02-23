@@ -4,27 +4,7 @@ import { AddressServices } from "../services/addressServices";
 import { userInterface } from "../types";
 
 export class UserController {
-  static deleteUser = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
-    try {
-      const { userId } = req.params;
-
-      await UserServices.remove(userId);
-
-      res.status(204).send();
-    } catch (err) {
-      next(err);
-    }
-  };
-
-  static postUser = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
+  static postUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userData = req.validatedFields as userInterface;
 
