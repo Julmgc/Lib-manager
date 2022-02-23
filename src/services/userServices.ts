@@ -111,12 +111,12 @@ export class UserServices {
     if (data.address) {
       const addressRepository = getCustomRepository(AddressRepository);
       const address = await addressRepository.findOne({
-        id: user?.address.id,
+        id: user.address.id,
       });
       if (!address) {
         return "Users address not found";
       }
-      await addressRepository.update(address?.id, data.address);
+      await addressRepository.update(address.id, data.address);
     }
 
     if (data.name) {

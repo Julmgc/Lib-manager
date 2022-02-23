@@ -39,12 +39,12 @@ describe("Controller Tests for Admin", () => {
     };
     const response = await request(app).post("/user").send(userData);
 
-    expect(response.body).toHaveProperty("name");
+    expect(response.body).toHaveProperty("authorized");
     expect(response.body).toHaveProperty("email");
     expect(response.body).toHaveProperty("id");
     expect(response.body).toHaveProperty("isAdm");
     expect(response.body).toHaveProperty("cpf");
-    expect(response.body.name).toBe("Natalia Cristine De Almeida Nunes");
+    expect(response.body.authorized).toBe(true);
     expect(response.body.password).not.toBe("123");
 
     userId = response.body.id;
@@ -108,5 +108,115 @@ describe("Controller Tests for Admin", () => {
     expect(response.body).toHaveProperty("cpf");
     expect(response.body).toHaveProperty("address");
     expect(response.body.address.city).toBe("Piraquara");
+  });
+
+  it("Should create a new book", async () => {
+    const BookData = {
+      name: "Harry Potter 4",
+      author: "J.K. Rowling",
+      genreCdd: 813,
+      pages: 342,
+    };
+    const response = await request(app)
+      .post("/book/")
+      .send(BookData)
+      .set({ Authorization: `Bearer ${token}` })
+      .expect(201);
+
+    bookId = response.body.book.id;
+
+    expect(response.body).toHaveProperty("admin");
+    expect(response.body).toHaveProperty("book");
+    expect(response.body.book.name).toBe("Harry Potter 4");
+    expect(response.body.genreCdd).not.toBe("123");
+    expect(response.body.book.loaned).toBe(false);
+  });
+
+  it("Should loan a book", async () => {
+    const UserData = {
+      userEmail: "natiunirio@hotmail.com",
+    };
+    const response = await request(app)
+      .post(`/book/loan/${bookId}`)
+      .send(UserData)
+      .set({ Authorization: `Bearer ${token}` })
+      .expect(201);
+
+    expect(response.body).toHaveProperty("checkout_date");
+    expect(response.body).toHaveProperty("return_date");
+    expect(response.body).toHaveProperty("id");
+    expect(response.body.renewed).toBe(false);
+    expect(response.body.returned).not.toBe(true);
+  });
+
+  it("Should return a book", async () => {
+    const response = await request(app)
+      .post(`/book/return/${bookId}`)
+      .set({ Authorization: `Bearer ${token}` })
+      .expect(200);
+
+    expect(response.body).toHaveProperty("name");
+    expect(response.body).toHaveProperty("loaned");
+    expect(response.body).toHaveProperty("genre");
+    expect(response.body).toHaveProperty("pages");
+    expect(response.body.name).toBe("Harry Potter 4");
+    expect(response.body.genre).not.toBe("123");
+    expect(response.body.loaned).toBe(false);
+  });
+
+  it("Should loan a book", async () => {
+    const UserData = {
+      userEmail: "natiunirio@hotmail.com",
+    };
+    const response = await request(app)
+      .post(`/book/loan/${bookId}`)
+      .send(UserData)
+      .set({ Authorization: `Bearer ${token}` })
+      .expect(201);
+
+    expect(response.body).toHaveProperty("checkout_date");
+    expect(response.body).toHaveProperty("return_date");
+    expect(response.body).toHaveProperty("id");
+    expect(response.body.renewed).toBe(false);
+    expect(response.body.returned).not.toBe(true);
+  });
+
+  it("Should show all books", async () => {
+    const response = await request(app).get("/book/").expect(200);
+
+    expect(response.body).toEqual(
+      expect.arrayContaining([expect.objectContaining({ id: bookId })])
+    );
+  });
+
+  it("Should show a specific book", async () => {
+    const response = await request(app).get(`/book/${bookId}`).expect(200);
+
+    expect(response.body).toHaveProperty("name");
+    expect(response.body).toHaveProperty("loaned");
+    expect(response.body).toHaveProperty("pages");
+    expect(response.body.name).toBe("Harry Potter 4");
+  });
+
+  it("Should return the users borrowed books", async () => {
+    const response = await request(app)
+      .get(`/book/loan/${userId}`)
+      .set({ Authorization: `Bearer ${token}` })
+      .expect(200);
+
+    expect(response.body).toEqual(
+      expect.arrayContaining([expect.objectContaining({ bookId: bookId })])
+    );
+  });
+
+  it("Should return all the books that are loaned", async () => {
+    const response = await request(app)
+      .get("/book/loan")
+      .set({ Authorization: `Bearer ${token}` })
+      .expect(200);
+
+    expect(response.body).toEqual(
+      expect.arrayContaining([expect.objectContaining({ bookId: bookId })])
+    );
   });
 });

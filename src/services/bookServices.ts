@@ -72,7 +72,10 @@ export class BookServices {
   static deleteBook = async (id: string) => {
     const bookRepo = this.bookRepository();
     const book = await bookRepo.findOne({ id });
-    if (book?.loaned) {
+    if (!book) {
+      throw new ApiError("Book doesn't exist", 404);
+    }
+    if (book.loaned) {
       throw new ApiError(
         "You can't delete a book that is currently loaned",
         403
