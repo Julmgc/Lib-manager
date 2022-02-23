@@ -7,25 +7,25 @@ import { userFromJwt } from "../middlewares/userMiddlewares";
 import reviewSchema from "../schemas/reviewSchema";
 
 const reviewRouter = () => {
-  const router = Router();
+    const router = Router();
 
-  router.post(
-    "/book/:bookId",
-    validateReqFields(reviewSchema),
-    userFromJwt,
-    ReviewController.postReview
-  );
+    router.post(
+        "/book/:bookId",
+        validateReqFields(reviewSchema),
+        userFromJwt,
+        ReviewController.postReview
+    );
 
-  router.get("/book/:id", verifyIfBookExist, ReviewController.getBookReviews);
+    router.get("/book/:id", verifyIfBookExist, ReviewController.getBookReviews);
 
-  router.get("/user/:userId", userExists, ReviewController.getUserReviews);
+    router.get("/user/:userId", userExists, ReviewController.getUserReviews);
 
-  router.get("", ReviewController.getAllReviews);
+    router.get("", ReviewController.getAllReviews);
 
-  router.patch("/:reviewId", userFromJwt, ReviewController.updateReview);
+    router.patch("/:reviewId", userFromJwt, ReviewController.updateReview);
 
-  router.delete("/:reviewId", ReviewController.deleteReview)
-  return router;
+    router.delete("/:reviewId", ReviewController.deleteReview)
+    return router;
 };
 
 export default reviewRouter;
