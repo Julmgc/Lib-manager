@@ -28,6 +28,16 @@ export class BookController {
     }
   };
 
+  static getOne = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params;
+      const book = await BookServices.findOneBook(id);
+      res.json(book);
+    } catch (err) {
+      next(err);
+    }
+  };
+
   static update = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const data = req.body;

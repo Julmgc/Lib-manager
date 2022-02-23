@@ -18,6 +18,8 @@ const bookRouter = () => {
 
   router.get("/", BookController.getAll);
 
+  router.get("/:id", verifyIfBookExist, BookController.getOne);
+
   router.patch("/:id", verifyIfBookExist, BookController.update);
 
   router.delete("/:id", verifyIfBookExist, BookController.deleteBook);

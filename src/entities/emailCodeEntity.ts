@@ -16,7 +16,7 @@ export default class EmailCode {
   @Column("varchar")
   code!: string;
 
-  @CreateDateColumn({ default: new Date() })
+  @CreateDateColumn({ default: new Date().toISOString() })
   generatedDate!: Date;
 
   @OneToOne(() => User)
