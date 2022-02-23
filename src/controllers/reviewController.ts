@@ -32,7 +32,7 @@ export class ReviewController {
       const { reviewId } = req.params;
       const userId = req.userDataByToken.id;
       await ReviewServices.deleteReview(reviewId, userId);
-      return res.status(204);
+      return res.status(204).send();
     } catch (err) {
       next(err);
     }

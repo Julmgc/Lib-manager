@@ -215,9 +215,9 @@ describe("Controller Tests for Admin", () => {
       .set({ Authorization: `Bearer ${token}` })
       .expect(200);
 
-    expect(response.body).toEqual(
-      expect.arrayContaining([expect.objectContaining({ bookId: bookId })])
-    );
+    expect(response.body[0].bookId).toEqual(bookId);
+  });
+
   it("Should Create a Review", async () => {
     const reviewData = {
       rating: 2,
@@ -242,15 +242,15 @@ describe("Controller Tests for Admin", () => {
 
     reviewId = response.body.review.id;
   });
-  it("Should get all the book reviews"),
-    async () => {
-      const response = await request(app)
-        .get(`/reviews/book/${bookId}`)
-        .set({ Authorization: `Bearer ${token}` });
 
-      expect(response.status).toBe(200);
-      expect(response.body).toHaveLength(1);
-    };
+  it("Should get all the book reviews", async () => {
+    const response = await request(app)
+      .get(`/reviews/book/${bookId}`)
+      .set({ Authorization: `Bearer ${token}` });
+
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveLength(1);
+  });
   it("Should get all the reviews", async () => {
     const response = await request(app)
       .get("/reviews")
@@ -278,8 +278,8 @@ describe("Controller Tests for Admin", () => {
       .send(updateData)
       .set({ Authorization: `Bearer ${token}` });
     expect(response.status).toBe(202);
-    expect(response.body).toHaveProperty("rating");
-    expect(response.body.rating).toBe(4);
+    expect(response.body.review).toHaveProperty("rating");
+    expect(response.body.review.rating).toBe(4);
   });
 
   it("Should delete a review", async () => {
