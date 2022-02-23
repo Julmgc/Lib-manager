@@ -18,12 +18,12 @@ cd LIB-MANAGER
 
 Copy the .env.example file and rename it with .env. Your credentials must be placed there.
 
-Installing the dependencies should run:
+### Installing the dependencies should run:
 
-Run `yarn` command
-Run `npm i` command
-Run `docker-compose up` command
-Run `npm start` command
+- Run `yarn` command
+- Run `npm i` command
+- Run `docker-compose up` command
+- Run `npm start` command
 
 Run future migrations:
 docker exec nomedocker yarn typeorm migration:generate -n nome
