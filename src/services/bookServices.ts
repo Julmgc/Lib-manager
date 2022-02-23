@@ -70,9 +70,6 @@ export class BookServices {
   };
 
   static deleteBook = async (id: string) => {
-    console.log(id);
-    // const userBookRepo = getCustomRepository(UserBooksRepository);
-    // await userBookRepo.delete(id);
     const bookRepo = this.bookRepository();
     const book = await bookRepo.findOne({ id });
     if (book?.loaned) {
