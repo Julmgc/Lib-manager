@@ -11,10 +11,10 @@ import emailRouter from "./emailRoute";
 const startRoutes = (app: Express) => {
   app.use("/user", userRouter());
   app.use("/genres", genreRouter());
+  app.use("/book", loanRouter());
   app.use("/book", bookRouter());
   app.use("/retrieve", retrieveRouter());
   app.use("/change", changePasswordRouter());
-  app.use("/book", loanRouter());
   app.use("/reviews", reviewRouter());
   app.use("/email", emailRouter());
 

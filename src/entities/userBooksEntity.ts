@@ -14,10 +14,13 @@ export default class UserBooks {
   @PrimaryGeneratedColumn("increment")
   id!: number;
 
-  @ManyToOne(() => User, (user) => user.loanedBooks, { eager: true })
+  @ManyToOne(() => User, (user) => user.loanedBooks, {
+    eager: true,
+    onDelete: "CASCADE",
+  })
   user!: User;
 
-  @ManyToOne(() => Book, { eager: true })
+  @ManyToOne(() => Book, { eager: true, onDelete: "CASCADE" })
   @JoinColumn()
   book!: Book;
 
