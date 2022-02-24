@@ -1,7 +1,5 @@
 import { getCustomRepository } from "typeorm";
 import GenreRepository from "../repositories/genreRepository";
-import fs from "fs";
-import path from "path";
 import { ApiError } from "../utils/errors";
 import ddc from "../utils/ddcCodes";
 
