@@ -5,76 +5,77 @@ import { ApiError } from "../utils/errors";
 import { UserServices } from "../services/userServices";
 
 export class EmailController {
-	static postEmailRetrieve = async (
-		req: Request,
-		res: Response,
-		next: NextFunction
-	) => {
-		try {
-			const email = req.body.email;
-			const codeEmail = await RetrieveServices.searchCode(email);
-			if (codeEmail) {
-				const emailOptions = {
-					from: process.env.MAILER_USER,
-					to: email,
-					template: "retrieve",
-					context: {
-						code: codeEmail.code,
-					},
-				};
+  static postEmailRetrieve = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const email = req.body.email;
+      const codeEmail = await RetrieveServices.searchCode(email);
+      if (codeEmail) {
+        const emailOptions = {
+          from: process.env.MAILER_USER,
+          to: email,
+          subject: "Código recuperação",
+          template: "retrieve",
+          context: {
+            code: codeEmail.code,
+          },
+        };
 
-				const transport = MailerServices.transport();
-				transport.sendMail(emailOptions);
-				return res.status(200).json({ message: "E-mail sent" });
-			}
-		} catch (err) {
-			console.log(err);
-			next(err);
-		}
-	};
+        const transport = MailerServices.transport();
+        transport.sendMail(emailOptions);
+        return res.status(200).json({ message: "E-mail sent" });
+      }
+    } catch (err) {
+      console.log(err);
+      next(err);
+    }
+  };
 
-	static sendEmail = async (
-		req: Request,
-		res: Response,
-		next: NextFunction
-	) => {
-		try {
-			const { email, message } = req.body;
-			const emailOptions = {
-				from: process.env.MAILER_USER,
-				to: email,
-				template: "retrieve",
-				context: {
-					message: message,
-				},
-			};
+  static sendEmail = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const { email, message } = req.body;
+      const emailOptions = {
+        from: process.env.MAILER_USER,
+        to: email,
+        template: "retrieve",
+        context: {
+          message: message,
+        },
+      };
 
-			const transport = MailerServices.transport();
-			transport.sendMail(emailOptions);
-			return res.status(200).json({ message: "E-mail sent" });
-		} catch (err) {
-			next(err);
-		}
-	};
+      const transport = MailerServices.transport();
+      transport.sendMail(emailOptions);
+      return res.status(200).json({ message: "E-mail sent" });
+    } catch (err) {
+      next(err);
+    }
+  };
 
-	static changePasswordRoute = async (
-		req: Request,
-		res: Response,
-		next: NextFunction
-	) => {
-		try {
-			const data = req.validatedFields;
-			const code = await RetrieveServices.getCode(data.email);
-			if (!code) {
-				return new ApiError("Invalid Email", 422);
-			}
-			if (data.code != code.code) {
-				return new ApiError("Invalid Code", 422);
-			}
-			await UserServices.updatePassword(data.newPassword, data.email);
-			return res.sendStatus(204);
-		} catch (e) {
-			next(e);
-		}
-	};
+  static changePasswordRoute = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const data = req.validatedFields;
+      const code = await RetrieveServices.getCode(data.email);
+      if (!code) {
+        return new ApiError("Invalid Email", 422);
+      }
+      if (data.code != code.code) {
+        return new ApiError("Invalid Code", 422);
+      }
+      await UserServices.updatePassword(data.newPassword, data.email);
+      return res.sendStatus(204);
+    } catch (e) {
+      next(e);
+    }
+  };
 }
