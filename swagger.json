@@ -1,0 +1,2496 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "version": "1.0.0",
+        "title": "LibManager",
+        "description": "Api para gerenciamento de uma biblioteca. É possível cadastrar livros e usuários, registrar empréstimos, acompanhar atrasos e multas."
+    },
+    "servers": [
+        {
+            "url": "http://localhost:3000",
+            "description": "Uso local: desenvolvimento e testes"
+        },
+        {
+            "url": "https://library--manager.herokuapp.com",
+            "description": "Produção"
+        }
+    ],
+    "tags": [
+        {
+            "name": "Users",
+            "description": "Gerenciamento de usuários"
+        },
+        {
+            "name": "Manage Books",
+            "description": "Create, recover, update, delete books"
+        },
+        {
+            "name": "Manage loans",
+            "description": "Manage loans, renews and returns"
+        },
+        {
+            "name": "Manage books reviews",
+            "description": "Create, recover, update, delete bookk reviews"
+        },
+        {
+            "name": "Password recovery",
+            "description": "Get a code via e-mail and change password"
+        }
+    ],
+    "paths": {
+        "/user": {
+            "post": {
+                "tags": ["Users"],
+                "description": "Create a new user",
+				"security": [],
+                "requestBody": {
+                    "content": {
+                        "JSON": {
+                            "schema": {
+                                "$ref": "#/components/schemas/req newUser"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "content": {
+                            "JSON": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/res User - 201"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Errors",
+                        "content": {
+                            "CPF Mismatch": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Err CPF Mismatch - 400"
+                                }
+                            },
+                            "Invalid CPF": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Err CPF Invalid - 400"
+                                }
+                            },
+                            "Missing Fields": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Err Missing Field - 400"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Conflicts",
+                        "content": {
+                            "Email already exists": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Err Email exists - 409"
+                                }
+                            },
+                            "CPF already exists": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Err CPF exists - 409"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "tags": ["Users"],
+                "description": "Recover all users, Admin only",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "JSON": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/res User - 201"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Errors",
+                        "content": {
+                            "JWT fail": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Err JWT - 400"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Missing?",
+                        "content": {
+                            "Missing Token": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Err Mising Token - 403"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Only Admin",
+                        "content": {
+                            "Admin only": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Err Adm Endpoint - 401"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "tags": ["Users"],
+                "description": "Update user infos",
+                "requestBody": {
+                    "description": "Update user data",
+                    "content": {
+                        "JSON": {
+                            "schema": {
+                                "$ref": "#/components/schemas/req newUser"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"JSON": {
+								"schema": {
+									"$ref": "#/components/schemas/res User - 201"
+								}
+							}
+						}
+					},
+					"409": {
+						"description": "Conflicts",
+						"content": {
+							"Email already exists": {
+								"schema": {
+									"$ref": "#/components/schemas/Err Email exists - 409"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Missing?",
+						"content": {
+							"Missing Token": {
+								"schema": {
+									"$ref": "#/components/schemas/Err Mising Token - 403"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Errors",
+						"content": {
+							"JWT fail": {
+								"schema": {
+									"$ref": "#/components/schemas/Err JWT - 400"
+								}
+							}
+						}
+					}
+				}
+            }
+        },
+        "/user/{userId}": {
+            "get": {
+                "tags": ["Users"],
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "required": true,
+                        "description": "UUID of user",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "description": "Retrieve user infos",
+                "responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"JSON": {
+								"schema": {
+									"$ref": "#/components/schemas/res User - 201"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Missing?",
+						"content": {
+							"Missing Token": {
+								"schema": {
+									"$ref": "#/components/schemas/Err Mising Token - 403"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Errors",
+						"content": {
+							"JWT fail": {
+								"schema": {
+									"$ref": "#/components/schemas/Err JWT - 400"
+								}
+							},
+                            "UUiD format": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Err UUID - 400"
+                                }
+                            }
+						}
+					},
+                    "401": {
+                        "description": "You can't",
+                        "content": {
+                            "User or Admin": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Err Adm privilegies - 401"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "content": {
+                            "JSON": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Err User Not Fount - 404"
+                                }
+                            }
+                        }
+                    }
+				}
+            }
+        },
+        "/user/login": {
+            "post": {
+				"tags": ["Users"],
+				"description": "Login to get a token",
+				"security": [],
+				"requestBody": {
+					"content": {
+						"JSON": {
+							"schema": {
+								"$ref": "#/components/schemas/req login"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"JSON": {
+								"schema": {
+									"$ref": "#/components/schemas/res token"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Errors",
+						"content": {
+							"Missing Fields": {
+								"schema": {
+									"$ref": "#/components/schemas/Err Missing Field - 400"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Not found",
+						"content": {
+							"JSON": {
+								"schema": {
+									"$ref": "#/components/schemas/Err User Not Fount - 404"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Incorrect",
+						"content": {
+							"Incorrect Pasword": {
+								"schema": {
+									"$ref": "#/components/schemas/Err Incorrect Password - 401"
+								}
+							}
+						}
+					}
+				}
+			}
+        },
+        "/genres": {
+            "get": {
+                "tags": ["Manage Books"],
+                "description": "Retrieve all genres",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Pagination",
+                        "schema": {
+                            "type": "number"
+                        }
+                    },
+                    {
+						"name": "per_page",
+						"in": "query",
+						"description": "Limit of items",
+						"schema": {
+							"type": "number"
+						}
+					}
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "JSON": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/res Genre"
+                                    }
+                                    
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/genres/{ddc}": {
+            "get": {
+                "tags": ["Manage Books"],
+                "parameters": [
+                    {
+                        "name": "ddc",
+                        "in": "path",
+                        "required": true,
+                        "description": "Dewey Decimal Classification code",
+                        "schema": {
+                            "type": "number"
+                        }
+                    }
+                ],
+                "description": "Retrieve specific genre",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "JSON": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/res Genre"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "content": {
+                            "JSON": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Err DDC Not Found - 404"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/book": {
+            "post": {
+				"tags": ["Manage Books"],
+				"description": "Create a new book",
+				"requestBody": {
+					"content": {
+						"JSON": {
+							"schema": {
+								"$ref": "#/components/schemas/req newBook"
+							}
+						}
+					}
+				},
+				"responses": {
+					"201": {
+						"description": "Created",
+						"content": {
+							"JSON": {
+								"schema": {
+									"$ref": "#/components/schemas/res Book"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Errors",
+						"content": {
+							"Missing Fields": {
+								"schema": {
+									"$ref": "#/components/schemas/Err Missing Field - 400"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Missing?",
+						"content": {
+							"Missing Token": {
+								"schema": {
+									"$ref": "#/components/schemas/Err Mising Token - 403"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Only Admin",
+						"content": {
+							"Admin only": {
+								"schema": {
+									"$ref": "#/components/schemas/Err Adm Endpoint - 401"
+								}
+							}
+						}
+					}
+				}
+			},
+            "get": {
+				"tags": ["Manage Books"],
+				"description": "Recover all books",
+				"parameters": [
+					{
+						"name": "page",
+						"in": "query",
+						"description": "Pagination",
+						"schema": {
+							"type": "number"
+						}
+					},
+					{
+						"name": "per_page",
+						"in": "query",
+						"description": "Limit of items",
+						"schema": {
+							"type": "number"
+						}
+					},
+					{
+						"name": "author",
+						"in": "query",
+						"description": "Author name",
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"name": "ddc",
+						"in": "query",
+						"description": "DDC code",
+						"schema": {
+							"type": "number"
+						}
+					},
+					{
+						"name": "category",
+						"in": "query",
+						"description": "Category name",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"JSON": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/res Book"
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Errors",
+						"content": {
+							"JWT fail": {
+								"schema": {
+									"$ref": "#/components/schemas/Err JWT - 400"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Missing?",
+						"content": {
+							"Missing Token": {
+								"schema": {
+									"$ref": "#/components/schemas/Err Mising Token - 403"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "No results",
+						"content": {
+							"JSON": {
+								"schema": {
+									"$ref": "#/components/schemas/Err Search Not Found - 404"
+								}
+							}
+						}
+					}
+				}
+			}
+        },
+        "/book/{bookId}": {
+            "get": {
+				"tags": ["Manage Books"],
+				"parameters": [
+					{
+						"name": "bookId",
+						"in": "path",
+						"required": true,
+						"description": "UUID of book",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"description": "Retrieve book infos",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"JSON": {
+								"schema": {
+									"$ref": "#/components/schemas/res Book"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Missing?",
+						"content": {
+							"Missing Token": {
+								"schema": {
+									"$ref": "#/components/schemas/Err Mising Token - 403"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Errors",
+						"content": {
+							"JWT fail": {
+								"schema": {
+									"$ref": "#/components/schemas/Err JWT - 400"
+								}
+							},
+							"UUiD format": {
+								"schema": {
+									"$ref": "#/components/schemas/Err UUID - 400"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Not found",
+						"content": {
+							"JSON": {
+								"schema": {
+									"$ref": "#/components/schemas/Err Book Not Found - 404"
+								}
+							}
+						}
+					}
+				}
+			},
+            "patch": {
+				"tags": ["Manage Books"],
+                "parameters": [
+					{
+						"name": "bookId",
+						"in": "path",
+						"required": true,
+						"description": "UUID of book",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"description": "Update any book info",
+				"requestBody": {
+					"description": "Update book data",
+					"content": {
+						"JSON": {
+							"schema": {
+								"$ref": "#/components/schemas/req newBook"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"JSON": {
+								"schema": {
+									"$ref": "#/components/schemas/res Book"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Missing?",
+						"content": {
+							"Missing Token": {
+								"schema": {
+									"$ref": "#/components/schemas/Err Mising Token - 403"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Only Admin",
+						"content": {
+							"Admin only": {
+								"schema": {
+									"$ref": "#/components/schemas/Err Adm Endpoint - 401"
+								}
+							}
+						}
+					}
+				}
+			},
+            "delete": {
+                "tags": ["Manage Books"],
+                "parameters": [
+					{
+						"name": "bookId",
+						"in": "path",
+						"required": true,
+						"description": "UUID of book",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+                "description": "Remove a book from database",
+                "responses": {
+					"204": {
+						"description": "No Body"
+					},
+					"404": {
+						"description": "Not found",
+						"content": {
+							"JSON": {
+								"schema": {
+									"$ref": "#/components/schemas/Err Book Not Found - 404"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Only Admin",
+						"content": {
+							"Admin only": {
+								"schema": {
+									"$ref": "#/components/schemas/Err Adm Endpoint - 401"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Missing?",
+						"content": {
+							"Missing Token": {
+								"schema": {
+									"$ref": "#/components/schemas/Err Mising Token - 403"
+								}
+							}
+						}
+					}
+				}
+            }
+        },
+        "/book/loan": {
+            "get": {
+				"tags": ["Manage loans"],
+				"description": "Recover all loans, Admin only",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"JSON": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/res Loan"
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Errors",
+						"content": {
+							"JWT fail": {
+								"schema": {
+									"$ref": "#/components/schemas/Err JWT - 400"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Missing?",
+						"content": {
+							"Missing Token": {
+								"schema": {
+									"$ref": "#/components/schemas/Err Mising Token - 403"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Only Admin",
+						"content": {
+							"Admin only": {
+								"schema": {
+									"$ref": "#/components/schemas/Err Adm Endpoint - 401"
+								}
+							}
+						}
+					}
+				}
+			}
+        },
+        "/book/loan/{id}": {
+            "get": {
+				"tags": ["Manage loans"],
+				"parameters": [
+					{
+						"name": "loanId",
+						"in": "path",
+						"required": true,
+						"description": "UUID of loan",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"description": "Retrieve loan infos",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"JSON": {
+								"schema": {
+									"$ref": "#/components/schemas/res Loan"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Missing?",
+						"content": {
+							"Missing Token": {
+								"schema": {
+									"$ref": "#/components/schemas/Err Mising Token - 403"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Errors",
+						"content": {
+							"JWT fail": {
+								"schema": {
+									"$ref": "#/components/schemas/Err JWT - 400"
+								}
+							},
+							"UUiD format": {
+								"schema": {
+									"$ref": "#/components/schemas/Err UUID - 400"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "You can't",
+						"content": {
+							"User or Admin": {
+								"schema": {
+									"$ref": "#/components/schemas/Err Adm privilegies - 401"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Not found",
+						"content": {
+							"JSON": {
+								"schema": {
+									"$ref": "#/components/schemas/Err Book Not Loaned - 400"
+								}
+							}
+						}
+					}
+				}
+			},
+            "post": {
+				"tags": ["Users"],
+				"parameters": [
+					{
+						"name": "bookId",
+						"in": "path",
+						"required": true,
+						"description": "UUID of book",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"description": "Loan a book",
+                "requestBody": {
+                    "content": {
+                        "JSON": {
+                            "schema": {
+                                "$ref": "#/components/schemas/req Loan"
+                            }
+                        }
+                    }
+                },
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"JSON": {
+								"schema": {
+									"$ref": "#/components/schemas/res Loan"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Missing?",
+						"content": {
+							"Missing Token": {
+								"schema": {
+									"$ref": "#/components/schemas/Err Mising Token - 403"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Errors",
+						"content": {
+							"JWT fail": {
+								"schema": {
+									"$ref": "#/components/schemas/Err JWT - 400"
+								}
+							},
+							"UUiD format": {
+								"schema": {
+									"$ref": "#/components/schemas/Err UUID - 400"
+								}
+							},
+                            "Book Loaned": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Err Book Loaned - 400"
+                                }
+                            },
+                            "Too much loans": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Err Loaning 6+ - 400"
+                                }
+                            }
+						}
+					},
+					"401": {
+						"description": "You can't",
+						"content": {
+							"User or Admin": {
+								"schema": {
+									"$ref": "#/components/schemas/Err Adm privilegies - 401"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Not found",
+						"content": {
+							"Book Not Found": {
+								"schema": {
+									"$ref": "#/components/schemas/Err Book Not Found - 404"
+								}
+							},
+                            "user Not Found": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Err User Not Fount - 404"
+                                }
+                            }
+                            
+						}
+					}
+				}
+			}
+        },
+        "/book/return/{bookId}": {
+            "post": {
+				"tags": ["Manage loans"],
+				"parameters": [
+					{
+						"name": "bookId",
+						"in": "path",
+						"required": true,
+						"description": "UUID of book",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"description": "Return a book",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"JSON": {
+								"schema": {
+									"$ref": "#/components/schemas/res Book"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Errors",
+						"content": {
+							"Not loaned": {
+								"schema": {
+									"$ref": "#/components/schemas/Err Book Not Loaned - 400"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Missing?",
+						"content": {
+							"Missing Token": {
+								"schema": {
+									"$ref": "#/components/schemas/Err Mising Token - 403"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Only Admin",
+						"content": {
+							"Admin only": {
+								"schema": {
+									"$ref": "#/components/schemas/Err Adm Endpoint - 401"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Not found",
+						"content": {
+							"JSON": {
+								"schema": {
+									"$ref": "#/components/schemas/Err Book Not Found - 404"
+								}
+							}
+						}
+					}
+				}
+			}
+        },
+        "/book/renew/{bookId}": {
+            "post": {
+				"tags": ["Manage loans"],
+				"parameters": [
+					{
+						"name": "bookId",
+						"in": "path",
+						"required": true,
+						"description": "UUID of book",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"description": "Renew loan",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"JSON": {
+								"schema": {
+									"$ref": "#/components/schemas/res Loan"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Errors",
+						"content": {
+							"Not loaned": {
+								"schema": {
+									"$ref": "#/components/schemas/Err Book Not Loaned - 400"
+								}
+							},
+							"Only 1 renew": {
+								"schema": {
+									"$ref": "#/components/schemas/Err Renew Twice - 400"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Missing?",
+						"content": {
+							"Missing Token": {
+								"schema": {
+									"$ref": "#/components/schemas/Err Mising Token - 403"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Not found",
+						"content": {
+							"JSON": {
+								"schema": {
+									"$ref": "#/components/schemas/Err Book Not Found - 404"
+								}
+							}
+						}
+					}
+				}
+			}
+        },
+        "/reviews": {
+            "get": {
+				"tags": ["Manage books reviews"],
+				"description": "Retrieve all reviews",
+				"responses": {
+					"200": {
+						"description": "OK",
+						"content": {
+							"JSON": {
+								"schema": {
+									"type": "array",
+									"items": {
+										"$ref": "#/components/schemas/res Review"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+        },
+        "/reviews/book/{bookId}": {
+            "get": {
+				"tags": ["Manage books reviews"],
+				"parameters": [
+					{
+						"name": "bookId",
+						"in": "path",
+						"required": true,
+						"description": "UUID of book",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"description": "Retrieve reviews of one book",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"JSON": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/res BookReview"
+                                    }
+									
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Missing?",
+						"content": {
+							"Missing Token": {
+								"schema": {
+									"$ref": "#/components/schemas/Err Mising Token - 403"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Errors",
+						"content": {
+							"JWT fail": {
+								"schema": {
+									"$ref": "#/components/schemas/Err JWT - 400"
+								}
+							},
+							"UUiD format": {
+								"schema": {
+									"$ref": "#/components/schemas/Err UUID - 400"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Not found",
+						"content": {
+							"JSON": {
+								"schema": {
+									"$ref": "#/components/schemas/Err Book Not Found - 404"
+								}
+							}
+						}
+					}
+				}
+			},
+            "post": {
+				"tags": ["Manage books reviews"],
+				"parameters": [
+					{
+						"name": "bookId",
+						"in": "path",
+						"required": true,
+						"description": "UUID of book",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"description": "Create o book review",
+				"requestBody": {
+					"description": "new review",
+					"content": {
+						"JSON": {
+							"schema": {
+								"$ref": "#/components/schemas/req newReview"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"JSON": {
+								"schema": {
+									"$ref": "#/components/schemas/res Review"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Missing?",
+						"content": {
+							"Missing Token": {
+								"schema": {
+									"$ref": "#/components/schemas/Err Mising Token - 403"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Not found",
+						"content": {
+							"JSON": {
+								"schema": {
+									"$ref": "#/components/schemas/Err Book Not Found - 404"
+								}
+							}
+						}
+					}
+				}
+			}
+        },
+        "/reviews/user/{userId}": {
+            "get": {
+				"tags": ["Manage books reviews"],
+				"parameters": [
+					{
+						"name": "userId",
+						"in": "path",
+						"required": true,
+						"description": "UUID of user",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"description": "Retrieve user reviews",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"JSON": {
+								"schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/res Review"
+                                    }
+									
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Missing?",
+						"content": {
+							"Missing Token": {
+								"schema": {
+									"$ref": "#/components/schemas/Err Mising Token - 403"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Errors",
+						"content": {
+							"JWT fail": {
+								"schema": {
+									"$ref": "#/components/schemas/Err JWT - 400"
+								}
+							},
+							"UUiD format": {
+								"schema": {
+									"$ref": "#/components/schemas/Err UUID - 400"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Not found",
+						"content": {
+							"JSON": {
+								"schema": {
+									"$ref": "#/components/schemas/Err User Not Fount - 404"
+								}
+							}
+						}
+					}
+				}
+			}
+        },
+        "/reviews/{reviewId}": {
+            "patch": {
+				"tags": ["Manage books reviews"],
+				"parameters": [
+					{
+						"name": "reviewId",
+						"in": "path",
+						"required": true,
+						"description": "UUID of book",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"description": "Update review",
+				"requestBody": {
+					"description": "Update review data",
+					"content": {
+						"JSON": {
+							"schema": {
+								"$ref": "#/components/schemas/req newReview"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"JSON": {
+								"schema": {
+									"$ref": "#/components/schemas/req newReview"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Missing?",
+						"content": {
+							"Missing Token": {
+								"schema": {
+									"$ref": "#/components/schemas/Err Mising Token - 403"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Yours?",
+						"content": {
+							"Only same user": {
+								"schema": {
+									"$ref": "#/components/schemas/Err Others Reviews - 401"
+								}
+							}
+						}
+					}
+				}
+			},
+            "delete": {
+				"tags": ["Manage books reviews"],
+				"parameters": [
+					{
+						"name": "reviewId",
+						"in": "path",
+						"required": true,
+						"description": "UUID of review",
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"description": "Remove a review",
+				"responses": {
+					"204": {
+						"description": "No Body"
+					},
+					"404": {
+						"description": "Not found",
+						"content": {
+							"JSON": {
+								"schema": {
+									"$ref": "#/components/schemas/Err Review Not Found - 404"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Missing?",
+						"content": {
+							"Missing Token": {
+								"schema": {
+									"$ref": "#/components/schemas/Err Mising Token - 403"
+								}
+							}
+						}
+					}
+				}
+			}
+        },
+        "/retrieve": {
+            "post": {
+				"tags": ["Password recovery"],
+				"description": "Get a code to recover password",
+				"security": [],
+				"requestBody": {
+					"content": {
+						"JSON": {
+							"schema": {
+								"$ref": "#/components/schemas/req Recover Password"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"JSON": {
+								"schema": {
+									"$ref": "#/components/schemas/res Recover"
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Errors",
+						"content": {
+							"Missing Fields": {
+								"schema": {
+									"$ref": "#/components/schemas/Err Missing Field - 400"
+								}
+							}
+						}
+					}
+				}
+			}
+        },
+        "/change": {
+            "post": {
+				"tags": ["Password recovery"],
+				"description": "Change password with code",
+				"security": [],
+				"requestBody": {
+					"content": {
+						"JSON": {
+							"schema": {
+								"$ref": "#/components/schemas/req newPassword"
+							}
+						}
+					}
+				},
+				"responses": {
+					"204": {
+						"description": "Ok"
+					},
+					"400": {
+						"description": "Errors",
+						"content": {
+							"Missing Fields": {
+								"schema": {
+									"$ref": "#/components/schemas/Err Missing Field - 400"
+								}
+							}
+						}
+					}
+				}
+			}
+        },
+        "/email": {
+            "post": {
+                "tags": ["Password recovery"],
+				"description": "Send a e-mail",
+				"requestBody": {
+					"content": {
+						"JSON": {
+							"schema": {
+								"$ref": "#/components/schemas/req Email"
+							}
+						}
+					}
+				},
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"JSON": {
+								"schema": {
+									"type": "object",
+									"properties": {
+										"message": {
+											"type": "string",
+											"description": "ok"
+										}
+									},
+									"example": {
+										"message": "E-mail sent"
+									}
+								}
+							}
+						}
+					},
+					"400": {
+						"description": "Errors",
+						"content": {
+							"Missing Fields": {
+								"schema": {
+									"$ref": "#/components/schemas/Err Missing Field - 400"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Not found",
+						"content": {
+							"JSON": {
+								"schema": {
+									"$ref": "#/components/schemas/Err User Not Fount - 404"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "You can't",
+						"content": {
+							"User or Admin": {
+								"schema": {
+									"$ref": "#/components/schemas/Err Adm privilegies - 401"
+								}
+							}
+						}
+					}
+				}
+			}
+            
+        },
+        "/fines": {
+            "get": {
+                "tags": ["Fines"],
+                "description": "Retrieve all fines from database",
+                "responses": {
+                    "200": {
+                        "description": "Ok",
+                        "content": {
+                            "JSON": {
+                                "schema": {
+									"type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/res Fine"
+                                    }
+									
+								}
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "security": [{"bearerAuth": []}],
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        },
+        "schemas": {
+			"req newUser": {
+				"type": "object",
+				"properties": {
+					"name": {
+						"type": "string",
+						"description": "User name"
+					},
+					"email": {
+						"type": "string",
+						"description": "User e-mail"
+					},
+					"password": {
+						"type": "string",
+						"description": "User password"
+					},
+					"isAdm": {
+						"type": "boolean",
+						"description": "Works on library?"
+					},
+					"cpf": {
+						"type": "string",
+						"description": "User cpf"
+					},
+					"birthDate": {
+						"type": "string",
+						"description": "User birthday"
+					},
+					"address": {
+						"properties": {
+							"street": {
+								"type": "string",
+								"description": "Street name"
+							},
+							"streetNumber": {
+								"type": "string",
+								"description": "Residence number"
+							},
+							"city": {
+								"type": "string",
+								"description": "City name"
+							},
+							"state": {
+								"type": "string",
+								"description": "State name"
+							},
+							"zipcode": {
+								"type": "string",
+								"description": "Zipcode"
+							},
+							"district": {
+								"type": "string",
+								"description": "Neighborhood"
+							}
+						}
+					}
+				},
+				"example": {
+					"name": "Zezinho da Silva",
+					"email": "ze@mail.com",
+					"password": "1234",
+					"isAdm": true,
+					"cpf": "12345678901",
+					"birthDate": "1978-12-13",
+					"address": {
+						"street": "rua um",
+						"streetNumber": "2",
+						"city": "cidadezinha",
+						"state": "RS",
+						"zipcode": "13548-796",
+						"district": "bairro"
+					}
+				}
+			},
+			"res User - 201": {
+				"type": "object",
+				"properties": {
+					"name": {
+						"type": "string",
+						"description": "User name"
+					},
+					"email": {
+						"type": "string",
+						"description": "User e-mail"
+					},
+					"password": {
+						"type": "string",
+						"description": "User password"
+					},
+					"isAdm": {
+						"type": "boolean",
+						"description": "Works on library?"
+					},
+					"cpf": {
+						"type": "string",
+						"description": "User cpf"
+					},
+					"birthDate": {
+						"type": "string",
+						"description": "User birthday"
+					},
+					"address": {
+						"properties": {
+							"street": {
+								"type": "string",
+								"description": "Street name"
+							},
+							"streetNumber": {
+								"type": "string",
+								"description": "Residence number"
+							},
+							"city": {
+								"type": "string",
+								"description": "City name"
+							},
+							"state": {
+								"type": "string",
+								"description": "State name"
+							},
+							"zipcode": {
+								"type": "string",
+								"description": "Zipcode"
+							},
+							"district": {
+								"type": "string",
+								"description": "Neighborhood"
+							}
+						}
+					},
+					"id": {
+						"type": "string",
+						"description": "User id, uuid format"
+					}
+				},
+				"example": {
+					"name": "Zezinho da Silva",
+					"email": "ze@mail.com",
+					"password": "1234",
+					"isAdm": true,
+					"cpf": "12345678901",
+					"birthDate": "1978-12-13",
+					"address": {
+						"street": "rua um",
+						"streetNumber": "2",
+						"city": "cidadezinha",
+						"state": "RS",
+						"zipcode": "13548-796",
+						"district": "bairro"
+					},
+					"id": "143fbbc6-1609-4c63-bd01-71d981eb3109"
+				}
+			},
+			"req login": {
+				"properties": {
+					"email": {
+						"type": "string",
+						"description": "Registered e-mail"
+					},
+					"password": {
+						"type": "string",
+						"description": "Resgistered password"
+					}
+				},
+				"example": {
+					"email": "ze@mail.com",
+					"password": "1234"
+				}
+			},
+			"res token": {
+				"properties": {
+					"token": {
+						"type": "string",
+						"description": "JWT token"
+					}
+				},
+				"example": {
+					"token": "saghfjkawhjhdgafbsejfjdhfakjdh"
+				}
+			},
+			"req Recover Password": {
+				"properties": {
+					"email": {
+						"type": "string",
+						"description": "A registered e-mail to recover password"
+					}
+				},
+				"example": {
+					"email": "ze@mail.com"
+				}
+			},
+			"res Recover": {
+				"properties": {
+					"message": {
+						"type": "string",
+						"description": "Ok message"
+					}
+				},
+				"example": {
+					"message": "Send email"
+				}
+			},
+            "req Email": {
+                "type": "object",
+                "properties": {
+					"email": {
+						"type": "string",
+						"description": "User e-mail"
+					},
+					"message": {
+						"type": "string",
+						"description": "Content of e-mail"
+					}
+				}
+            },
+            "res Fine": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"description": "Fine id"
+					},
+					"worth": {
+						"type": "number",
+						"description": "Pay it"
+					},
+					"total": {
+						"type": "number",
+						"description": "Pay it"
+					},
+					"userId": {
+						"type": "string",
+						"description": "User UUID"
+					},
+					"bookId": {
+						"type": "string",
+						"description": "Book UUID"
+					}
+				},
+				"example": {
+					"id": 1,
+                    "worth": 5,
+                    "total": 5,
+                    "userId": "143fbbc6-1609-4c63-bd01-71d981eb3109",
+                    "bookId": "143fbbc6-1609-4c63-bd01-71d981eb3109"
+				}
+			},
+            "req newPassword": {
+                "type": "object",
+                "properties": {
+					"code": {
+						"type": "string",
+						"description": "Code sent by e-mail"
+					},
+					"email": {
+						"type": "string",
+						"description": "User e-mail"
+					},
+					"newPassword": {
+						"type": "string",
+						"description": "New password"
+					}
+				},
+                "example": {
+                    "code": "asdf3g",
+                    "email": "ze@mail.com",
+                    "newPassword": "abcd"
+                }
+            },
+			"req newBook": {
+				"type": "object",
+				"properties": {
+					"name": {
+						"type": "string",
+						"description": "Book title"
+					},
+					"author": {
+						"type": "string",
+						"description": "Book author"
+					},
+					"pages": {
+						"type": "string",
+						"description": "Number of pages"
+					},
+					"genreCdd": {
+						"type": "string",
+						"description": "Dewey Decimal Classification"
+					}
+				},
+				"example": {
+					"name": "A bela e a Fera",
+					"author": "Clarice Lispector",
+					"pages": 111,
+					"genreCdd": 869
+				}
+			},
+			"res Book": {
+				"type": "object",
+				"properties": {
+					"name": {
+						"type": "string",
+						"description": "Book title"
+					},
+					"author": {
+						"type": "string",
+						"description": "Book author"
+					},
+					"pages": {
+						"type": "string",
+						"description": "Number of pages"
+					},
+					"loaned": {
+						"type": "boolean",
+						"description": "Book is out?"
+					},
+					"genre": {
+						"type": "object",
+						"properties": {
+							"ddc": {
+								"type": "string",
+								"description": "Dewey Decimal Classification"
+							},
+							"description": {
+								"type": "string",
+								"description": "Verbose DDC"
+							}
+						}
+					},
+					"id": {
+						"type": "string",
+						"description": "uuid format of book id"
+					},
+					"published_date": {
+						"type": "string",
+						"description": "Date of publication"
+					}
+				},
+				"example": {
+					"name": "A bela e a Fera",
+					"author": "Clarice Lispector",
+					"pages": 111,
+					"loaned": false,
+					"genre": {
+						"ddc": "869",
+						"description": "Portuguese"
+					},
+					"id": "87d3ec84-5dd6-494a-a013-bbdd92ec4b3c",
+					"published_date": "2010-02-19T21:14:25.229Z"
+				}
+			},
+			"req Loan": {
+				"type": "object",
+				"properties": {
+					"userEmail": {
+						"type": "string",
+						"description": "user e-mail who will loan the book"
+					}
+				},
+				"example": {
+					"userEmail": "ze@mail.com"
+				}
+			},
+			"req newReview": {
+				"type": "object",
+				"properties": {
+					"rating": {
+						"type": "number",
+						"description": "User rate for the book"
+					},
+					"reviewContent": {
+						"type": "string",
+						"description": "Free text, user opinion"
+					}
+				},
+				"example": {
+					"rating": 5,
+					"reviewContent": "Cool"
+				}
+			},
+			"res Loan": {
+				"type": "object",
+				"properties": {
+					"id": {
+						"type": "string",
+						"description": "register loan id"
+					},
+					"checkout_date": {
+						"type": "string",
+						"description": "Date of checkout"
+					},
+					"return_date": {
+						"type": "string",
+						"description": "Date to return"
+					},
+					"renewed": {
+						"type": "boolean",
+						"description": "Renewed some time?"
+					},
+					"returned": {
+						"type": "string",
+						"description": "Already returned"
+					},
+					"bookId": {
+						"type": "string",
+						"description": "uuid of book"
+					}
+				},
+				"example": {
+					"id": 2,
+					"checkout_date": "2022-02-19T21:14:37.681Z",
+					"return_date": "2022-02-26",
+					"renewed": false,
+					"returned": false,
+					"bookId": "87d3ec84-5dd6-494a-a013-bbdd92ec4b3c"
+				}
+			},
+			"res Genre": {
+				"type": "object",
+				"properties": {
+					"ddc": {
+						"type": "string",
+						"description": "Dewey Decimal Classification"
+					},
+					"description": {
+						"type": "string",
+						"description": "Verbose DDC"
+					}
+				},
+				"example": {
+					"ddc": "869",
+					"description": "Portuguese"
+				}
+			},
+			"res BookReview": {
+				"type": "object",
+				"properties": {
+					"rating": {
+						"type": "number",
+						"description": "Rating given by user"
+					},
+					"reviewContent": {
+						"type": "string",
+						"description": "Free text, opinion about the book"
+					},
+					"id": {
+						"type": "string",
+						"description": "UUID of review"
+					},
+					"createdOn": {
+						"type": "string",
+						"description": "Date of creation"
+					},
+					"user": {
+						"type": "object",
+						"properties": {
+							"id": {
+								"type": "string",
+								"description": "UUID of user"
+							},
+							"name": {
+								"type": "string",
+								"description": "User name"
+							}
+						}
+					}
+				}
+			},
+			"res Review": {
+				"type": "object",
+				"properties": {
+					"user": {
+						"properties": {
+							"id": {
+								"type": "string",
+								"description": "UUID of user"
+							},
+							"name": {
+								"type": "string",
+								"description": "User name"
+							}
+						}
+					},
+					"book": {
+						"properties": {
+							"name": {
+								"type": "string",
+								"description": "Book title"
+							},
+							"author": {
+								"type": "string",
+								"description": "Book author"
+							},
+							"pages": {
+								"type": "string",
+								"description": "Number of pages"
+							},
+							"loaned": {
+								"type": "boolean",
+								"description": "Book is out?"
+							},
+							"genre": {
+								"type": "object",
+								"properties": {
+									"ddc": {
+										"type": "string",
+										"description": "Dewey Decimal Classification"
+									},
+									"description": {
+										"type": "string",
+										"description": "Verbose DDC"
+									}
+								}
+							},
+							"id": {
+								"type": "string",
+								"description": "uuid format of book id"
+							},
+							"published_date": {
+								"type": "string",
+								"description": "Date of publication"
+							}
+						}
+					},
+					"review": {
+						"properties": {
+							"rating": {
+								"type": "number",
+								"description": "Rating given by user"
+							},
+							"reviewContent": {
+								"type": "string",
+								"description": "Free text, opinion about the book"
+							},
+							"id": {
+								"type": "string",
+								"description": "UUID of review"
+							},
+							"createdOn": {
+								"type": "string",
+								"description": "Date of creation"
+							}
+						}
+					}
+				},
+				"example": {
+					"user": {
+						"id": "181ce881-5bfd-48cf-9c2c-ae3c646aaf86",
+						"name": "Zezinho da Silva"
+					},
+					"book": {
+						"name": "A bela e a Fera",
+						"author": "Clarice Lispector",
+						"pages": 111,
+						"loaned": false,
+						"genre": {
+							"ddc": "869",
+							"description": "Portuguese"
+						},
+						"id": "87d3ec84-5dd6-494a-a013-bbdd92ec4b3c",
+						"published_date": "2010-02-19T21:14:25.229Z"
+					},
+					"review": {
+						"rating": 5,
+						"reviewContent": "texto legal ou não ou indiferente ou...",
+						"id": "8c655803-f4b1-4983-aed2-35bc08f4f5f0",
+						"createdOn": "2022-02-23T22:17:54.010Z"
+					}
+				}
+			},
+			"Err CPF Mismatch - 400": {
+				"properties": {
+					"status": {
+						"description": "error"
+					},
+					"message": {
+						"description": "Name doesn't match with registered with CPF"
+					}
+				},
+				"example": {
+					"status": "error",
+					"message": "The name informed doesn't match with CPF register"
+				}
+			},
+			"Err Incorrect Password - 401": {
+				"properties": {
+					"status": {
+						"description": "error"
+					},
+					"message": {
+						"description": "Password mismatch with database"
+					}
+				},
+				"example": {
+					"status": "error",
+					"message": "Incorrect password"
+				}
+			},
+			"Err User Not Fount - 404": {
+				"properties": {
+					"status": {
+						"description": "error"
+					},
+					"message": {
+						"description": "User not registered"
+					}
+				},
+				"example": {
+					"status": "error",
+					"message": "User not found"
+				}
+			},
+			"Err CPF Invalid - 400": {
+				"properties": {
+					"status": {
+						"description": "error"
+					},
+					"message": {
+						"description": "CPF is not valid"
+					}
+				},
+				"example": {
+					"status": "error",
+					"message": "Not found valid register for informed CPF"
+				}
+			},
+			"Err Book Loaned - 400": {
+				"properties": {
+					"status": {
+						"description": "error"
+					},
+					"message": {
+						"description": "The book requested already has been loaned"
+					}
+				},
+				"example": {
+					"status": "error",
+					"message": "This book was already loaned"
+				}
+			},
+			"Err Loaning 6+ - 400": {
+				"properties": {
+					"status": {
+						"description": "error"
+					},
+					"message": {
+						"description": "User can't loan more than 6 books"
+					}
+				},
+				"example": {
+					"status": "error",
+					"message": "User already has 6 books loaned!"
+				}
+			},
+			"Err Book Not Loaned - 400": {
+				"properties": {
+					"status": {
+						"description": "error"
+					},
+					"message": {
+						"description": "The book trying to return was not loaned"
+					}
+				},
+				"example": {
+					"status": "error",
+					"message": "This book is not loaned!"
+				}
+			},
+			"Err Renew Twice - 400": {
+				"properties": {
+					"status": {
+						"description": "error"
+					},
+					"message": {
+						"description": "Can't renew a book twice"
+					}
+				},
+				"example": {
+					"status": "error",
+					"message": "It's not possible to renew twice!"
+				}
+			},
+			"Err No Loans - 404": {
+				"properties": {
+					"status": {
+						"description": "error"
+					},
+					"message": {
+						"description": "The user don't have any book loaned"
+					}
+				},
+				"example": {
+					"status": "error",
+					"message": "No loans found for this user!"
+				}
+			},
+			"Err Othres Review - 401": {
+				"properties": {
+					"status": {
+						"description": "error"
+					},
+					"message": {
+						"description": "You can't update others reviews"
+					}
+				},
+				"example": {
+					"status": "error",
+					"message": "You can only update your own review"
+				}
+			},
+			"Err DDC Not Found - 404": {
+				"properties": {
+					"status": {
+						"description": "error"
+					},
+					"message": {
+						"description": "DDC not found"
+					}
+				},
+				"example": {
+					"status": "error",
+					"message": "DDC not found!"
+				}
+			},
+			"Err Review Not Found - 404": {
+				"properties": {
+					"status": {
+						"description": "error"
+					},
+					"message": {
+						"description": "Review not found"
+					}
+				},
+				"example": {
+					"status": "error",
+					"message": "Review not found!"
+				}
+			},
+            "Err Others Reviews - 401": {
+                "properties": {
+                    "status": {
+						"description": "error"
+					},
+					"message": {
+						"description": "Not yours"
+					}
+                },
+                "example": {
+					"status": "error",
+					"message": "You can only update your own review"
+				}
+            },
+			"Err Search Not Found - 404": {
+				"properties": {
+					"status": {
+						"description": "error"
+					},
+					"message": {
+						"description": "The search don't found results"
+					}
+				},
+				"example": {
+					"status": "error",
+					"message": "No results found!"
+				}
+			},
+			"Err Book Not Found - 404": {
+				"properties": {
+					"status": {
+						"description": "error"
+					},
+					"message": {
+						"description": "The book doesn't exists on database"
+					}
+				},
+				"example": {
+					"status": "error",
+					"message": "Book not found!"
+				}
+			},
+			"Err Missing Field - 400": {
+				"properties": {
+					"status": {
+						"description": "error"
+					},
+					"message": {
+						"description": "Required fields missing"
+					}
+				},
+				"example": {
+					"status": "error",
+					"message": {
+						"ValidationError": ["Field password required!"]
+					}
+				}
+			},
+			"Err Adm privilegies - 401": {
+				"properties": {
+					"status": {
+						"description": "error"
+					},
+					"message": {
+						"description": "You are not an Admin"
+					}
+				},
+				"example": {
+					"status": "error",
+					"message": "Admin privilegies needed to mess with othres account!"
+				}
+			},
+			"Err Email exists - 409": {
+				"properties": {
+					"status": {
+						"description": "error"
+					},
+					"message": {
+						"description": "E-mail already exists on database"
+					}
+				},
+				"example": {
+					"status": "error",
+					"message": "E-mail already exists!"
+				}
+			},
+			"Err CPF exists - 409": {
+				"properties": {
+					"status": {
+						"description": "error"
+					},
+					"message": {
+						"description": "CPF already exists on database"
+					}
+				},
+				"example": {
+					"status": "error",
+					"message": "CPF already exists!"
+				}
+			},
+			"Err Adm Endpoint - 401": {
+				"properties": {
+					"status": {
+						"description": "error"
+					},
+					"message": {
+						"description": "Your are not an admin"
+					}
+				},
+				"example": {
+					"status": "error",
+					"message": "Admin privilegies needed to this endpoint!"
+				}
+			},
+			"Err Mising Token - 403": {
+				"properties": {
+					"status": {
+						"description": "error"
+					},
+					"message": {
+						"description": "Missing headers token"
+					}
+				},
+				"example": {
+					"status": "error",
+					"message": "Header Authorization Beares Token nedded for this endpoint!"
+				}
+			},
+			"Err JWT - 400": {
+				"properties": {
+					"status": {
+						"description": "error"
+					},
+					"message": {
+						"description": "JWT Token invalid or expired"
+					}
+				},
+				"example": {
+					"status": "error",
+					"message": "JWT invalid or expired"
+				}
+			},
+			"Err UUID - 400": {
+				"properties": {
+					"status": {
+						"description": "error"
+					},
+					"message": {
+						"description": "Id parameter need to be a UUID format"
+					}
+				},
+				"example": {
+					"status": "error",
+					"message": "Invalid id params, expect uuid format"
+				}
+			},
+			"Err Recov Email - 422": {
+				"properties": {
+					"status": {
+						"description": "error"
+					},
+					"message": {
+						"description": "This e-mail doesn't want to change password"
+					}
+				},
+				"example": {
+					"status": "error",
+					"message": "Invalid e-mail"
+				}
+			},
+			"Err Recov Code - 422": {
+				"properties": {
+					"status": {
+						"description": "error"
+					},
+					"message": {
+						"description": "Wrong code, copy and paste again"
+					}
+				},
+				"example": {
+					"status": "error",
+					"message": "Invalid code"
+				}
+			}
+		}
+    }
+}
