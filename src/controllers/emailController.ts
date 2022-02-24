@@ -23,7 +23,7 @@ export class EmailController {
 
         const transport = MailerServices.transport();
         transport.sendMail(emailOptions);
-        return res.status(200).json({ message: "Send email" });
+        return res.status(200).json({ message: "E-mail sent" });
       }
     } catch (err) {
       console.log(err);
@@ -49,7 +49,7 @@ export class EmailController {
       
       const transport = MailerServices.transport();
       transport.sendMail(emailOptions);
-      return res.status(200).json({ message: "Send email" });
+      return res.status(200).json({ message: "E-mail sent" });
     } catch (err) {
       next(err);
     }
