@@ -27,8 +27,8 @@ export default class Book {
   @Column({ nullable: false })
   pages!: number;
 
-  @CreateDateColumn({ nullable: false })
-  published_date!: Date;
+  @Column({ nullable: false })
+  published_year!: number;
 
   @ManyToOne(() => Genre, { eager: true })
   genre!: Genre;

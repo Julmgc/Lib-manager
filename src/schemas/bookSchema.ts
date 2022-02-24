@@ -5,6 +5,7 @@ const bookSchema = yup.object().shape({
   author: yup.string().required(),
   pages: yup.number().required(),
   genreCdd: yup.number().required(),
+  published_year: yup.number().required(),
 });
 
 export default bookSchema;
