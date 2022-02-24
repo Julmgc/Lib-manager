@@ -27,15 +27,13 @@ export default class Review {
 
   @Column()
   reviewContent!: string;
-  // constructor(bookId: string) {
-  //   this.bookId = bookId;
-  // }
+  
 
   toJSON() {
     const { user, book, ...review } = this;
-    const json = user
-      ? { user: { id: user.id, name: user.name }, book, review }
-      : review;
-    return json;
+    if (user) {
+      return { user: { id: user.id, name: user.name }, book, review }
+    }
+    return review;
   }
 }
