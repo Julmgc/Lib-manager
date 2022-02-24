@@ -29,8 +29,8 @@ export default class Book {
   @Column({ nullable: false })
   pages!: number;
 
-  @CreateDateColumn({ nullable: false })
-  published_date!: Date;
+  @Column({ nullable: false })
+  published_year!: number;
 
   @ManyToOne(() => Genre, { eager: true })
   genre!: Genre;
@@ -44,16 +44,17 @@ export default class Book {
   @Column()
   loaned!: boolean;
 
-  toJSON() {
+  toJSON(): any {
     const { admin, ...book } = this;
-    const json: any = {
-      admin: {
-        id: admin.id,
-        name: admin.name,
-      },
-      book,
-    };
-
-    return json;
+    if (admin) {
+      return {
+        admin: {
+          id: admin.id,
+          name: admin.name,
+        },
+        book,
+      };
+    }
+    return book;
   }
 }

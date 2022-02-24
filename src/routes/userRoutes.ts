@@ -1,53 +1,45 @@
 import { Router } from "express";
 import { UserController } from "../controllers/userController";
 import {
-	paramsVSjwt,
-	userExists,
-	userFromJwt,
-	userIsAdm,
+  paramsVSjwt,
+  userExists,
+  userFromJwt,
+  userIsAdm,
 } from "../middlewares/userMiddlewares";
 import { verifyIfEmailExists } from "../middlewares/userMiddlewares";
 import validateReqFields from "../middlewares/validateFields";
 import { updateUserSchema, userSchema } from "../schemas/userSchema";
 
 const userRouter = () => {
-	const router = Router();
-	
-	router.post(
-		"/",
-		validateReqFields(userSchema),
-		verifyIfEmailExists,
-		UserController.postUser
-	);
+  const router = Router();
 
-	router.delete(
-		"/:userId",
-		userExists,
-		userFromJwt,
-		paramsVSjwt,
-		UserController.deleteUser
-	);
+  router.post(
+    "/",
+    validateReqFields(userSchema),
+    verifyIfEmailExists,
+    UserController.postUser
+  );
 
-	router.get("/", userFromJwt, userIsAdm, UserController.getUsers);
+  router.get("/", userFromJwt, userIsAdm, UserController.getUsers);
 
-	router.get(
-		"/:userId",
-		userExists,
-		userFromJwt,
-		paramsVSjwt,
-		UserController.getUser
-	);
+  router.get(
+    "/:userId",
+    userExists,
+    userFromJwt,
+    paramsVSjwt,
+    UserController.getUser
+  );
 
-	router.post("/login", UserController.loginUser);
+  router.post("/login", UserController.loginUser);
 
-	router.patch(
-		"/",
-		validateReqFields(updateUserSchema),
-		userFromJwt,
-		UserController.updateUser
-	);
+  router.patch(
+    "/",
+    validateReqFields(updateUserSchema),
+    userFromJwt,
+    UserController.updateUser
+  );
 
-	return router;
+  return router;
 };
 
 export default userRouter;

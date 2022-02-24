@@ -29,6 +29,10 @@ export class ReviewController {
     next: NextFunction
   ) => {
     try {
+      const { reviewId } = req.params;
+      const userId = req.userDataByToken.id;
+      await ReviewServices.deleteReview(reviewId, userId);
+      return res.status(204).send();
     } catch (err) {
       next(err);
     }
@@ -48,7 +52,7 @@ export class ReviewController {
         data,
         userId
       );
-      return res.status(201).json(updatedReview);
+      return res.status(202).json(updatedReview);
     } catch (err) {
       next(err);
     }

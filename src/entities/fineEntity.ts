@@ -15,8 +15,8 @@ export default class Fine {
 	@PrimaryGeneratedColumn("increment")
 	id!: number;
 
-    @OneToOne(() => Book, {eager: true})
-    @JoinColumn()
+	@OneToOne(() => Book, { eager: true })
+	@JoinColumn()
 	book!: Book;
 
 	@ManyToOne(() => User)
@@ -27,4 +27,14 @@ export default class Fine {
 
 	@Column()
 	total!: number;
+
+	userId?: string;
+	bookId?: string;
+
+	toJSON() {
+		const { user, book, ...data } = this;
+		data["userId"] = user.id;
+		data["bookId"] = book.id;
+		return data;
+	}
 }

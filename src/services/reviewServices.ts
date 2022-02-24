@@ -65,7 +65,10 @@ export class ReviewServices {
   static async updateReview(reviewId: string, data: any, userId: any) {
     const repository = this.reviewRepository();
     const review = await repository.findOne(reviewId);
-    if (review?.user.id == userId) {
+    if (!review) {
+      throw new ApiError("Review not found", 404);
+    }
+    if (review.user.id == userId) {
       await repository.save({
         ...review,
         ...data,
@@ -75,5 +78,22 @@ export class ReviewServices {
     } else {
       throw new ApiError("You can only update your own review", 401);
     }
+  }
+
+  static async deleteReview(reviewId: string, userId: string) {
+    const repository = this.reviewRepository();
+    const review = await repository.findOne(reviewId);
+    const userRepo = UserServices.userRepository();
+    const user = await userRepo.findOne(userId);
+    if (!user) {
+      throw new ApiError("User doesn't exist", 404);
+    }
+    if (!review) {
+      throw new ApiError("Review not found!", 401);
+    }
+    if (review.user.id == user.id || user.isAdm) {
+      return await repository.delete(reviewId);
+    }
+    return;
   }
 }

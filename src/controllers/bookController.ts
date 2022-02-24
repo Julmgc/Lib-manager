@@ -13,16 +13,34 @@ export class BookController {
     }
   };
 
-  static deleteBook = async (req: Request, res: Response) => {
-    const { id } = req.params;
-    await BookServices.deleteBook(id);
-    return res.sendStatus(204);
+  static deleteBook = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const { id } = req.params;
+      await BookServices.deleteBook(id);
+      return res.sendStatus(204);
+    } catch (err) {
+      next(err);
+    }
   };
 
   static getAll = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const books = await BookServices.getAllBooks(req.query);
       res.json(books);
+    } catch (err) {
+      next(err);
+    }
+  };
+
+  static getOne = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params;
+      const book = await BookServices.findOneBook(id);
+      res.json(book);
     } catch (err) {
       next(err);
     }
