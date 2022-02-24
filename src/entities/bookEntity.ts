@@ -44,15 +44,15 @@ export default class Book {
 
   toJSON() {
     const { admin, ...book } = this;
-    const json = admin
-      ? {
+    if(admin) {
+      return {
           admin: {
             id: admin.id,
             name: admin.name,
           },
           book,
         }
-      : book;
-    return json;
+    }
+    return book;
   }
 }
