@@ -19,7 +19,7 @@ export default class Fine {
 	@JoinColumn()
 	book!: Book;
 
-	@ManyToOne(() => User)
+	@ManyToOne(() => User, {eager: true})
 	user!: User;
 
 	@Column()
