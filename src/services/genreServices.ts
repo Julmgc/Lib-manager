@@ -18,7 +18,7 @@ export class GenreServices {
 		}
 
 		fs.readFile(
-			path.resolve(__dirname, "..", "utils/ddcCodes.json"),
+			path.resolve("/src/utils/ddcCodes.json"),
 			"utf8",
 			(err, data) => {
 				this.genreRepository()
