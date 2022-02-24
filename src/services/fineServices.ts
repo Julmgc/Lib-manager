@@ -17,7 +17,6 @@ export class FineServices {
     const repository = this.fineRepository();
     const user = UserServices.findById(userId)
     const fines = await repository.find({where: {user: user}});
-    console.log(fines)
     return fines;
   };
 
