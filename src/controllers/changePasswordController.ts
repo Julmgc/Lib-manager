@@ -19,7 +19,7 @@ export class changePassword {
         return new ApiError("Invalid Code", 422);
       }
       await UserServices.updatePassword(data.newPassword, data.email);
-      return res.sendStatus(200);
+      return res.sendStatus(204);
     } catch (e) {
       next(e);
     }

@@ -3,9 +3,8 @@ import express from "express";
 import startRoutes from "./routes";
 import { handleError } from "./utils/errors";
 import swaggerUi from "swagger-ui-express";
-// import swaggerFile from "../swagger.json";
+import swaggerFile from "../swagger.json";
 import dotenv from "dotenv";
-import scheduler from "./utils/scheduler";
 
 
 dotenv.config();
@@ -14,12 +13,9 @@ const app = express();
 
 app.use(express.json());
 
-
 startRoutes(app);
 
-// app.use("/", swaggerUi.serve, swaggerUi.setup(swaggerFile));
-
-scheduler();
+app.use("/", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 app.use(handleError);
 
