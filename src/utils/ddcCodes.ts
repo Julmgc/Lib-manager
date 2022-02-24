@@ -1,4 +1,4 @@
-[
+const ddc = [
 	{
 		"id": "000",
 		"ddc": "000",
@@ -2585,3 +2585,5 @@
 	},
 	{ "id": "999", "ddc": "999", "description": "Extraterrestrial worlds" }
 ]
+
+export default ddc;
