@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { FineServices } from "../services/fineServices";
+import { ApiError } from "../utils/errors";
 
 export class FineController {
   static getAll = async (req: Request, res: Response, next: NextFunction) => {
@@ -8,21 +9,34 @@ export class FineController {
 
       return res.json(fines);
     } catch (err) {
+      console.log(err);
       next(err);
     }
   };
-  static getByUser = async (
+
+  static getUserFines = async (
     req: Request,
     res: Response,
     next: NextFunction
   ) => {
     try {
-      const { userId } = req.params;
-      const fines = await FineServices.findById(userId);
+      const { id } = req.params;
+      const fines = await FineServices.getUserFines(id);
 
-      return res.send(fines);
+      return res.json(fines);
     } catch (err) {
       next(err);
+    }
+  };
+
+  static payFine = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { fineId } = req.params;
+      await FineServices.payFine(fineId);
+
+      return res.sendStatus(204);
+    } catch (err) {
+      next(new ApiError("Fine not found", 404));
     }
   };
 }

@@ -1850,6 +1850,10 @@
 						"type": "string",
 						"description": "Book author"
 					},
+					"published_year": {
+						"type": "string",
+						"description": "Year of publication"
+					},
 					"pages": {
 						"type": "string",
 						"description": "Number of pages"

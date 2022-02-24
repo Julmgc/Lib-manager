@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { FineController } from "../controllers/fineController";
+import { verifyUUIDFormat } from "../middlewares/apiMiddlewares";
 import {
   userFromJwt,
   userIsAdm,
@@ -13,11 +14,14 @@ const fineRouter = () => {
   router.get("/", userFromJwt, userIsAdm, FineController.getAll);
   router.get(
     "/:userId",
+    verifyUUIDFormat,
     userExists,
     userFromJwt,
     paramsVSjwt,
-    FineController.getByUser
+    FineController.getUserFines
   );
+
+  router.post("/pay/:fineId", userFromJwt, userIsAdm, FineController.payFine);
 
   return router;
 };

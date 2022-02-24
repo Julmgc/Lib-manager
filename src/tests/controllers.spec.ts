@@ -116,6 +116,7 @@ describe("Controller Tests for Admin", () => {
       author: "J.K. Rowling",
       genreCdd: 813,
       pages: 342,
+      published_year: 385,
     };
     const response = await request(app)
       .post("/book/")
@@ -288,5 +289,20 @@ describe("Controller Tests for Admin", () => {
       .set({ Authorization: `Bearer ${token}` });
 
     expect(response.status).toBe(204);
+  });
+
+  it("Should recover a code", async () => {
+    const email = {
+      email: "natiunirio@hotmail.com"
+    };
+    const response = await request(app)
+      .post('/retrieve')
+      .set({ Authorization: `Bearer ${token}` })
+      .send(email);
+
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty("message");
+    expect(response.body.message).toBe("E-mail sent");
+
   });
 });

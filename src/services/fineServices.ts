@@ -1,5 +1,6 @@
 import { getCustomRepository } from "typeorm";
 import FineRepository from "../repositories/fineRepository";
+import { UserServices } from "./userServices";
 
 export class FineServices {
   static fineRepository = () => {
@@ -11,10 +12,17 @@ export class FineServices {
 
     return fines;
   };
-  static findById = async (userId: string) => {
-    const repository = this.fineRepository();
-    const fines = await repository.find({ where: { id: userId } });
 
+  static getUserFines = async (userId: string) => {
+    const repository = this.fineRepository();
+    const user = UserServices.findById(userId);
+    const fines = await repository.find({ where: { user: user } });
     return fines;
+  };
+
+  static payFine = async (fineId: string) => {
+    const repository = this.fineRepository();
+    await repository.delete(fineId);
+    return;
   };
 }

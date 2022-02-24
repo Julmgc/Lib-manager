@@ -5,6 +5,7 @@ import { userExists } from "../middlewares/userMiddlewares";
 import validateReqFields from "../middlewares/validateFields";
 import { userFromJwt } from "../middlewares/userMiddlewares";
 import reviewSchema from "../schemas/reviewSchema";
+import { verifyUUIDFormat } from "../middlewares/apiMiddlewares";
 
 const reviewRouter = () => {
   const router = Router();
@@ -12,19 +13,40 @@ const reviewRouter = () => {
   router.post(
     "/book/:bookId",
     validateReqFields(reviewSchema),
+    verifyUUIDFormat,
     userFromJwt,
     ReviewController.postReview
   );
 
-  router.get("/book/:id", verifyIfBookExist, ReviewController.getBookReviews);
+  router.get(
+		"/book/:id",
+		verifyUUIDFormat,
+		verifyIfBookExist,
+		ReviewController.getBookReviews
+  );
 
-  router.get("/user/:userId", userExists, ReviewController.getUserReviews);
+  router.get(
+		"/user/:userId",
+		verifyUUIDFormat,
+		userExists,
+		ReviewController.getUserReviews
+  );
 
   router.get("", ReviewController.getAllReviews);
 
-  router.patch("/:reviewId", userFromJwt, ReviewController.updateReview);
+  router.patch(
+		"/:reviewId",
+		verifyUUIDFormat,
+		userFromJwt,
+		ReviewController.updateReview
+  );
 
-  router.delete("/:reviewId", userFromJwt, ReviewController.deleteReview);
+  router.delete(
+		"/:reviewId",
+		verifyUUIDFormat,
+		userFromJwt,
+		ReviewController.deleteReview
+  );
   return router;
 };
 

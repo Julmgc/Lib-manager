@@ -8,10 +8,6 @@ const changePasswordSchema = yup.object().shape({
     .length(6),
   email: yup.string().required().email(),
   newPassword: yup.string().required(),
-  passwordCheck: yup
-    .string()
-    .required()
-    .oneOf([yup.ref("newPassword")], "Passwords must match"),
 });
 
 export default changePasswordSchema;
