@@ -11,4 +11,10 @@ export class FineServices {
 
     return fines;
   };
+  static findById = async (userId: string) => {
+    const repository = this.fineRepository();
+    const fines = await repository.find({ where: { id: userId } });
+
+    return fines;
+  };
 }

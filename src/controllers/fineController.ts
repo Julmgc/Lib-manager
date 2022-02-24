@@ -11,4 +11,18 @@ export class FineController {
       next(err);
     }
   };
+  static getByUser = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    try {
+      const { userId } = req.params;
+      const fines = await FineServices.findById(userId);
+
+      return res.send(fines);
+    } catch (err) {
+      next(err);
+    }
+  };
 }
