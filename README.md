@@ -18,19 +18,11 @@ cd LIB-MANAGER
 
 Copy the .env.example file and rename it with .env. Your credentials must be placed there.
 
-### Installing the dependencies should run:
+### Executing local:
 
-- Run `yarn` command
-- Run `npm i` command
-- Run `docker-compose up` command
-- Run `npm start` command
+- Run: `docker-compose up` command
 
-Run future migrations:
-docker exec nomedocker yarn typeorm migration:generate -n nome
-docker exec nomedocker yarn typeorm migration:run
-
-Run the tests:
-yarn test --detectOpenHandles
+- Run the tests: `yarn test`
 
 ## Use
 
@@ -38,7 +30,7 @@ To use it, you must use an API Client like Insomnia. At localhost:3000/#/ ou htt
 
 ### Examples of use
 
-The documentation you can access with the localhost
+The documentation you can access on the root ("/")
 
 ### Technologies Used
 

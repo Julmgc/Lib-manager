@@ -25,7 +25,6 @@ export class FineController {
 
 			return res.json(fines);
 		} catch (err) {
-			console.log(err);
 			next(err);
 		}
 	};
