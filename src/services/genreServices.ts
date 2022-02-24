@@ -3,6 +3,7 @@ import GenreRepository from "../repositories/genreRepository";
 import fs from "fs";
 import path from "path";
 import { ApiError } from "../utils/errors";
+import ddc from "../utils/ddcCodes";
 
 export class GenreServices {
   static genreRepository = () => {
@@ -17,17 +18,7 @@ export class GenreServices {
       return;
     }
 
-    fs.readFile(
-      path.resolve("app/src/utils/ddcCodes.json"),
-      "utf8",
-      (err, data) => {
-        this.genreRepository()
-          .createQueryBuilder()
-          .insert()
-          .values(JSON.parse(data))
-          .execute();
-      }
-    );
+    this.genreRepository().createQueryBuilder().insert().values(ddc).execute();
   };
 
   static getAll = async (page: number = 1, per_page: number = 999) => {
