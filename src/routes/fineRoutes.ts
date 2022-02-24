@@ -9,7 +9,7 @@ const fineRouter = () => {
 
   router.get("/user", userFromJwt, FineController.getUserFines);
 
-  router.post("/pay/:fineId", FineController.payFine);
+  router.post("/pay/:fineId", userFromJwt, userIsAdm, FineController.payFine);
 
   return router;
 };

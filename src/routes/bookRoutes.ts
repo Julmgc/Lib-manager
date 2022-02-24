@@ -20,9 +20,15 @@ const bookRouter = () => {
 
   router.get("/:id", verifyIfBookExist, BookController.getOne);
 
-  router.patch("/:id", verifyIfBookExist, BookController.update);
+  router.patch("/:id", verifyIfBookExist, userFromJwt, userIsAdm, BookController.update);
 
-  router.delete("/:id", verifyIfBookExist, BookController.deleteBook);
+  router.delete(
+		"/:id",
+		verifyIfBookExist,
+		userFromJwt,
+		userIsAdm,
+		BookController.deleteBook
+  );
 
   return router;
 };
