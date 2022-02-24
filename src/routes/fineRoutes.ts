@@ -12,6 +12,7 @@ const fineRouter = () => {
   const router = Router();
 
   router.get("/", userFromJwt, userIsAdm, FineController.getAll);
+
   router.get(
     "/:userId",
     verifyUUIDFormat,
@@ -20,10 +21,6 @@ const fineRouter = () => {
     paramsVSjwt,
     FineController.getUserFines
   );
-
-  router.post("/pay/:fineId", userFromJwt, userIsAdm, FineController.payFine);
-
-  router.get("/user", userFromJwt, FineController.getUserFines);
 
   router.post("/pay/:fineId", userFromJwt, userIsAdm, FineController.payFine);
 

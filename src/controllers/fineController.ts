@@ -20,8 +20,8 @@ export class FineController {
     next: NextFunction
   ) => {
     try {
-      const { id } = req.params;
-      const fines = await FineServices.getUserFines(id);
+      const { userId } = req.params;
+      const fines = await FineServices.getUserFines(userId);
 
       return res.json(fines);
     } catch (err) {
