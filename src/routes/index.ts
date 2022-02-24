@@ -7,6 +7,7 @@ import changePasswordRouter from "./changePasswordRoutes";
 import loanRouter from "./loanRoutes";
 import reviewRouter from "./reviewRoutes";
 import emailRouter from "./emailRoute";
+import fineRouter from "./fineRoutes";
 
 const startRoutes = (app: Express) => {
   app.use("/user", userRouter());
@@ -17,6 +18,7 @@ const startRoutes = (app: Express) => {
   app.use("/change", changePasswordRouter());
   app.use("/reviews", reviewRouter());
   app.use("/email", emailRouter());
+  app.use("/fines", fineRouter());
 
   return app;
 };
