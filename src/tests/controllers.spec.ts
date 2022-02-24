@@ -290,4 +290,19 @@ describe("Controller Tests for Admin", () => {
 
     expect(response.status).toBe(204);
   });
+
+  it("Should recover a code", async () => {
+    const email = {
+      email: "natiunirio@hotmail.com"
+    };
+    const response = await request(app)
+      .post('/retrieve')
+      .set({ Authorization: `Bearer ${token}` })
+      .send(email);
+
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty("message");
+    expect(response.body.message).toBe("E-mail sent");
+
+  });
 });
