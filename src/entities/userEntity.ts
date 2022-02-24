@@ -49,14 +49,8 @@ export default class User {
   @JoinColumn()
   address!: Address;
 
-  // @OneToMany(() => Book, book => book.user)
-  // books!: Book[];
-
   @OneToMany(() => Review, (review) => review.user)
   reviews!: Review[];
-
-  // @OneToMany(() => UserBooks, userBooks => userBooks.user)
-  // userBooks!: UserBooks[];
 
   @OneToMany(() => Fine, (fine) => fine.user)
   fines!: Fine[];
