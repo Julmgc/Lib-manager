@@ -8,6 +8,9 @@ import jwt from "jsonwebtoken";
 import { ApiError } from "../utils/errors";
 import { Response } from "express";
 import checkCPF from "c-check-cpf";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const jwtConfig = {
   secret: <string>process.env.JWT_SECRET_KEY,
