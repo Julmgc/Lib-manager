@@ -26,6 +26,7 @@ export interface bookInterface {
   author: string;
   pages: number;
   genreCdd: number;
+  published_year: number;
 }
 export interface loginInterface {
   email: string;

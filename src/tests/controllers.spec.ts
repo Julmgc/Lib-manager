@@ -116,6 +116,7 @@ describe("Controller Tests for Admin", () => {
       author: "J.K. Rowling",
       genreCdd: 813,
       pages: 342,
+      published_year: 385,
     };
     const response = await request(app)
       .post("/book/")

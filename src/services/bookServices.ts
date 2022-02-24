@@ -25,6 +25,7 @@ export class BookServices {
       genre: genre,
       admin: user,
       loaned: false,
+      published_year: body.published_year,
     });
 
     await bookRepo.save(book);
