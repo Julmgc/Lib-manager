@@ -41,13 +41,15 @@ export class EmailController {
   ) => {
     try {
       const { email, message } = req.body;
+      const user = await UserServices.getByEmail(email);
+      if (!user) {
+        throw new ApiError("User not found", 404);
+      }
       const emailOptions = {
         from: process.env.MAILER_USER,
         to: email,
-        template: "retrieve",
-        context: {
-          message: message,
-        },
+        subject: "LibManager Contact",
+        html: `<p>${message}</p>`,
       };
 
       const transport = MailerServices.transport();

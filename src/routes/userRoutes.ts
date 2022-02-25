@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { UserController } from "../controllers/userController";
+import { verifyUUIDFormat } from "../middlewares/apiMiddlewares";
 import {
   paramsVSjwt,
   userExists,
@@ -24,6 +25,7 @@ const userRouter = () => {
 
   router.get(
     "/:userId",
+    verifyUUIDFormat,
     userExists,
     userFromJwt,
     paramsVSjwt,

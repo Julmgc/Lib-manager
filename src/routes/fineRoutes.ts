@@ -1,15 +1,28 @@
 import { Router } from "express";
 import { FineController } from "../controllers/fineController";
-import { userFromJwt, userIsAdm } from "../middlewares/userMiddlewares";
+import { verifyUUIDFormat } from "../middlewares/apiMiddlewares";
+import {
+  userFromJwt,
+  userIsAdm,
+  userExists,
+  paramsVSjwt,
+} from "../middlewares/userMiddlewares";
 
 const fineRouter = () => {
   const router = Router();
 
   router.get("/", userFromJwt, userIsAdm, FineController.getAll);
 
-  router.get("/user", userFromJwt, FineController.getUserFines);
+  router.get(
+    "/:userId",
+    verifyUUIDFormat,
+    userExists,
+    userFromJwt,
+    paramsVSjwt,
+    FineController.getUserFines
+  );
 
-  router.post("/pay/:fineId", FineController.payFine);
+  router.post("/pay/:fineId", userFromJwt, userIsAdm, FineController.payFine);
 
   return router;
 };

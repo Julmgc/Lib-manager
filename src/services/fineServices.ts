@@ -15,14 +15,14 @@ export class FineServices {
 
   static getUserFines = async (userId: string) => {
     const repository = this.fineRepository();
-    const user = UserServices.findById(userId)
-    const fines = await repository.find({where: {user: user}});
+    const user = UserServices.findById(userId);
+    const fines = await repository.find({ where: { user: user } });
     return fines;
   };
 
   static payFine = async (fineId: string) => {
     const repository = this.fineRepository();
-    await repository.delete(fineId)
+    await repository.delete(fineId);
     return;
-  }
+  };
 }
