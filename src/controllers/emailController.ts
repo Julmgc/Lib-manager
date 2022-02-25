@@ -47,10 +47,8 @@ export class EmailController {
 			const emailOptions = {
 				from: process.env.MAILER_USER,
 				to: email,
-				template: "retrieve",
-				context: {
-					message: message,
-				},
+				subject: "LibManager Contact",
+				html: `<p>${message}</p>`
 			};
 
 			const transport = MailerServices.transport();
