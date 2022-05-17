@@ -75,7 +75,7 @@ export class UserController {
       const updatedUser = await UserServices.updateUser(data, userId);
       return res.status(200).json(updatedUser);
     } catch (err) {
-      next(err);
+      next(err); 
     }
   };
 }

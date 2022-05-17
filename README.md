@@ -1,6 +1,6 @@
 # Lib Manager
 
-"An API to register books, users and control the borrowing of books from a library."
+"An API using python, flask, flask-SQLAlchemy to register books, users and control the borrowing of books from a library."
 
 ## How to run and install
 
